@@ -1,5 +1,7 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
+#include "./classes/player.h"
+#include "./classes/enemy.h"
 
 using namespace sf;
 using namespace std;
@@ -13,6 +15,11 @@ int main() {
     RenderWindow window(sf::VideoMode((int)width,(int)
     height), "Card Combat");
     window.setFramerateLimit(120);
+
+
+    Player player(&window);
+    Enemies enemy(&window, 10);
+
 
 
 
@@ -43,6 +50,8 @@ int main() {
 
 
         //update and display
+        enemy.update();
+        player.update();
         window.display();
 
     }
