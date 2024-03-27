@@ -23,16 +23,19 @@ int main() {
     GameSituation gameSituation = IDLE;
 
 
+
+
     //List of all the enemies
     vector<Entity *> enemies;
 
-    for (int i = 0; i < 3; i++) {
-        float xPos = ((float)window.getSize().x - (float)window.getSize().x / 3.0f * 2) / 2.0f + (float)i * ((float)window.getSize().x / 3.0f);
-        enemies.emplace_back(new Enemy(&gameSituation, &window, xPos));
-    }
-
-
     Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::Right, &enemies);
+
+
+    for (int i = 0; i < 3; i++) {
+        float xPos = ((float) window.getSize().x - (float) window.getSize().x / 3.0f * 2) / 2.0f +
+                     (float) i * ((float) window.getSize().x / 3.0f);
+        enemies.emplace_back(new Enemy(&gameSituation, &window, xPos, &player));
+    }
 
 
     while (window.isOpen()) {
@@ -53,8 +56,17 @@ int main() {
             }
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+        if (Keyboard::isKeyPressed(Keyboard::Escape)){
             return 0;
+        }
+        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)){
+            gameSituation = ENEMY_TURN;
+        }
+        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::E)){
+            gameSituation = PLAYER_TURN;
+        }
+        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::I)){
+            gameSituation = IDLE;
         }
         //clear
         window.clear(Color::Black);

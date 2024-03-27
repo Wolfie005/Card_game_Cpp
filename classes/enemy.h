@@ -8,22 +8,26 @@ using namespace std;
 
 class Enemy : public Entity {
 public:
-    [[maybe_unused]]
-    explicit Enemy(GameSituation *situation, RenderWindow *currentWindow, float positionX) : Entity(situation, currentWindow, 10) {
+    Enemy(GameSituation *situation, RenderWindow *currentWindow, float positionX, Player *player) : Entity(situation, currentWindow, 10),
+            player(player){
 
         entity.setPosition(positionX, (float) window->getSize().y / 3.0f);
-
+        damage = 5;
     }
 
     void update() override {
-        if (health > 0) {
-            window->draw(entity);
+        if (health <= 0) return;
+        window->draw(entity);
+        if (*situation != GameSituation::ENEMY_TURN)return;
+        *situation = GameSituation::IDLE;
+        for (int i = 0; i < 3; i++) {
+            doDamage(player);
+            printf("damage");
         }
     }
 
 
 
 private:
-
+    Player *player;
 };
-

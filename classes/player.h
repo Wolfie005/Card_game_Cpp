@@ -26,14 +26,14 @@ public:
 
 
     void update() override {
-        window->draw(entity);
+        if (health >= 0) window->draw(entity);
 
         if (KeyHandler::getInstance().isKeyTrigger(RightSelectKey)) {
             if (SelectedEnemy + 1 > enemies->size() - 1) SelectedEnemy = 0;
             else SelectedEnemy += 1;
         }
 
-        if (KeyHandler::getInstance().isKeyTrigger(attackKey)) {
+        if (KeyHandler::getInstance().isKeyTrigger(attackKey) && *situation == GameSituation::PLAYER_TURN){
             doDamage(enemies->at(SelectedEnemy));
         }
     }
