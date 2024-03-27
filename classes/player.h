@@ -21,7 +21,7 @@ public:
 
         entity.setPosition((float) window->getSize().x / 2.0f, (float) window->getSize().y / 1.5f);
         damage = 5;
-        initializeHealthBar();
+        initializeHealthBar(PLAYER);
     }
 
 
