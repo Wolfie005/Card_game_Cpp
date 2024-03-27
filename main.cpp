@@ -75,7 +75,9 @@ int main() {
         //update and display
         for (auto entity: enemies) {
             entity->update();
+            entity->updateHealthBar();
         }
+        player.updateHealthBar();
         player.update();
         window.display();
 
