@@ -23,7 +23,6 @@ public:
         *situation = GameSituation::IDLE;
         for (int i = 0; i < 3; i++) {
             doDamage(player);
-            printf("damage");
         }
     }
 

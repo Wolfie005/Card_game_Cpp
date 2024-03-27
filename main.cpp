@@ -12,6 +12,17 @@ float width = 1920;
 float height = 1080;
 
 string GameState = "Start";
+int GameWave = 0;
+
+
+void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<Entity *> *enemies, Player *player) {
+    GameState = "Fight";
+    for (int i = 0; i < 3; i++) {
+        float xPos = ((float) currentWindow->getSize().x - (float) currentWindow->getSize().x / 3.0f * 2) / 2.0f +
+                     (float) i * ((float) currentWindow->getSize().x / 3.0f);
+        enemies->emplace_back(new Enemy(situation, currentWindow, xPos, player));
+    }
+}
 
 int main() {
     KeyHandler::getInstance();
@@ -29,13 +40,6 @@ int main() {
     vector<Entity *> enemies;
 
     Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::Right, &enemies);
-
-
-    for (int i = 0; i < 3; i++) {
-        float xPos = ((float) window.getSize().x - (float) window.getSize().x / 3.0f * 2) / 2.0f +
-                     (float) i * ((float) window.getSize().x / 3.0f);
-        enemies.emplace_back(new Enemy(&gameSituation, &window, xPos, &player));
-    }
 
 
     while (window.isOpen()) {
@@ -56,16 +60,25 @@ int main() {
             }
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Escape)){
+        if (GameState == "Wave") {
+            enemies.clear();
+            enemySpawn(&window, &gameSituation, &enemies, &player);
+        }
+
+
+        if (Keyboard::isKeyPressed(Keyboard::Escape)) {
             return 0;
         }
-        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)){
+        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::O)) {
+            GameState = "Wave";
+        }
+        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)) {
             gameSituation = ENEMY_TURN;
         }
-        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::E)){
+        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::E)) {
             gameSituation = PLAYER_TURN;
         }
-        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::I)){
+        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::I)) {
             gameSituation = IDLE;
         }
         //clear
@@ -82,4 +95,5 @@ int main() {
         window.display();
 
     }
+
 }
