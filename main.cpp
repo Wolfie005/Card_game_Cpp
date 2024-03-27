@@ -2,6 +2,8 @@
 #include "SFML/Graphics.hpp"
 #include "./classes/player.h"
 #include "./classes/enemy.h"
+#include "classes/gameSituation.h"
+#include "classes/KeyHandler.h"
 
 using namespace sf;
 using namespace std;
@@ -12,15 +14,25 @@ float height = 1080;
 string GameState = "Start";
 
 int main() {
-    RenderWindow window(sf::VideoMode((int)width,(int)
+    KeyHandler::getInstance();
+    RenderWindow window(VideoMode((int)width,(int)
     height), "Card Combat");
     window.setFramerateLimit(120);
+    window.setKeyRepeatEnabled(false);
+
+    GameSituation gameSituation = IDLE;
 
 
-    Player player(&window);
-    Enemies enemy(&window, 10);
+    //List of all the enemies
+    vector<Entity *> enemies;
+
+    for (int i = 0; i < 3; i++) {
+        float xPos = ((float)window.getSize().x - (float)window.getSize().x / 3.0f * 2) / 2.0f + (float)i * ((float)window.getSize().x / 3.0f);
+        enemies.emplace_back(new Enemy(&gameSituation, &window, xPos));
+    }
 
 
+    Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::Right, &enemies);
 
 
     while (window.isOpen()) {
@@ -33,7 +45,10 @@ int main() {
                 case sf::Event::Closed:
                     window.close();
                     break;
-                case sf::Event::KeyPressed:
+                case Event::KeyReleased:
+                    KeyHandler::getInstance().key_triggered[event.key.code] = false;
+                    break;
+                default:
                     break;
             }
         }
@@ -41,16 +56,14 @@ int main() {
         if (Keyboard::isKeyPressed(Keyboard::Escape)) {
             return 0;
         }
-
-
-
-
         //clear
         window.clear(Color::Black);
 
 
         //update and display
-        enemy.update();
+        for (auto entity: enemies) {
+            entity->update();
+        }
         player.update();
         window.display();
 

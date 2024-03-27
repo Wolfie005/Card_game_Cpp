@@ -1,39 +1,29 @@
-//
-// Created by Sebastian Håfström on 2024-03-26.
-//
-
-#ifndef CARD_GAME_ENEMY_H
-#define CARD_GAME_ENEMY_H
-
 #include "SFML/Graphics.hpp"
+#include "entity.h"
 
 using namespace sf;
 using namespace std;
 
-class Enemies {
+
+
+class Enemy : public Entity {
 public:
-    Enemies(RenderWindow *currentwindow, int health) {
-        this->window = currentwindow;
+    [[maybe_unused]]
+    explicit Enemy(GameSituation *situation, RenderWindow *currentWindow, float positionX) : Entity(situation, currentWindow, 10) {
 
-        RectangleShape _enemy;
-
-        _enemy.setSize(Vector2f(50, 100));
-        _enemy.setOrigin(_enemy.getSize().x / 2, _enemy.getSize().y / 2);
-        _enemy.setFillColor(Color::White);
-        _enemy.setPosition((float) window->getSize().x / 2.0f, (float)window->getSize().y / 3.0f);
-        this->enemy = _enemy;
+        entity.setPosition(positionX, (float) window->getSize().y / 3.0f);
 
     }
 
-    void update() {
-        window->draw(enemy);
+    void update() override {
+        if (health > 0) {
+            window->draw(entity);
+        }
     }
+
+
 
 private:
-    RenderWindow *window;
-    RectangleShape enemy;
 
 };
 
-
-#endif //CARD_GAME_ENEMY_H

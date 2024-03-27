@@ -6,33 +6,43 @@
 #define CARD_GAME_PLAYER_H
 
 #include "SFML/Graphics.hpp"
+#include "entity.h"
+#include "KeyHandler.h"
 
 using namespace sf;
 using namespace std;
 
-class Player {
+class Player : public Entity {
 public:
-    Player(RenderWindow *currentwindow) {
-        this->window = currentwindow;
+    Player(GameSituation *situation, RenderWindow *currentWindow, Keyboard::Key attackKey, Keyboard::Key RightSelectKey,
+           vector<Entity *> *enemies)
+            : Entity(situation, currentWindow, 100), enemies(enemies), attackKey(attackKey),
+              RightSelectKey(RightSelectKey) {
 
-        RectangleShape _player;
-
-        _player.setSize(Vector2f(50, 100));
-        _player.setOrigin(_player.getSize().x / 2, _player.getSize().y / 2);
-        _player.setFillColor(Color::White);
-        _player.setPosition((float) window->getSize().x / 2.0f, (float)window->getSize().y / 1.5f);
-        this->player = _player;
+        entity.setPosition((float) window->getSize().x / 2.0f, (float) window->getSize().y / 1.5f);
+        damage = 5;
 
     }
 
-    void update() {
-        window->draw(player);
+
+    void update() override {
+        window->draw(entity);
+
+        if (KeyHandler::getInstance().isKeyTrigger(RightSelectKey)) {
+            if (SelectedEnemy + 1 > enemies->size() - 1) SelectedEnemy = 0;
+            else SelectedEnemy += 1;
+        }
+
+        if (KeyHandler::getInstance().isKeyTrigger(attackKey)) {
+            doDamage(enemies->at(SelectedEnemy));
+        }
     }
 
 private:
-    RenderWindow *window;
-    RectangleShape player;
-
+    int SelectedEnemy = 1;
+    Keyboard::Key RightSelectKey;
+    Keyboard::Key attackKey;
+    vector<Entity *> *enemies;
 };
 
 #endif //CARD_GAME_PLAYER_H
