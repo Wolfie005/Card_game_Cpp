@@ -71,6 +71,7 @@ public:
     void doDamage(Entity *opponent) const {
         opponent->receiveDamage(damage);
     }
+    virtual bool markedForRemoval() = 0;
 
 
 protected:

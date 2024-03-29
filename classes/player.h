@@ -14,9 +14,9 @@ using namespace std;
 
 class Player : public Entity {
 public:
-    Player(GameSituation *situation, RenderWindow *currentWindow, Keyboard::Key attackKey, Keyboard::Key RightSelectKey,
+    Player(GameSituation *situation, RenderWindow *currentWindow, Keyboard::Key attackKey, Keyboard::Key HealKey, Keyboard::Key RightSelectKey,
            vector<Entity *> *enemies)
-            : Entity(situation, currentWindow, 100), enemies(enemies), attackKey(attackKey),
+            : Entity(situation, currentWindow, 100), enemies(enemies), attackKey(attackKey), HealKey(HealKey),
               RightSelectKey(RightSelectKey) {
 
         entity.setPosition((float) window->getSize().x / 2.0f, (float) window->getSize().y / 1.5f);
@@ -26,22 +26,50 @@ public:
 
 
     void update() override {
-        if (health >= 0) window->draw(entity);
+        if (GameState == "Game Over"){
+            return;
+        }
+        if(health <= 0){
+            GameState = "Game Over";
+        }
 
+        window->draw(entity);
+
+
+        if (SelectedEnemy > enemies->size() - 1 && !enemies->empty()){
+            SelectedEnemy = 0;
+        }
+
+        if (enemies->empty()) {
+            SelectedEnemy = -1;
+        }
+
+        if (SelectedEnemy != -1 && KeyHandler::getInstance().isKeyTrigger(attackKey) && *situation == GameSituation::PLAYER_TURN){
+            doDamage(enemies->at(SelectedEnemy));
+            *situation = GameSituation::ENEMY_TURN;
+        }
         if (KeyHandler::getInstance().isKeyTrigger(RightSelectKey)) {
             if (SelectedEnemy + 1 > enemies->size() - 1) SelectedEnemy = 0;
             else SelectedEnemy += 1;
         }
-
-        if (KeyHandler::getInstance().isKeyTrigger(attackKey) && *situation == GameSituation::PLAYER_TURN){
-            doDamage(enemies->at(SelectedEnemy));
+        if (KeyHandler::getInstance().isKeyTrigger(HealKey) && health + 10 <= initialHealth){
+            health += 10;
         }
+
+    }
+    bool markedForRemoval() override{
+        return false;
+    }
+
+    void setSelectedEnemy(int i){
+        SelectedEnemy = i;
     }
 
 private:
     int SelectedEnemy = 1;
     Keyboard::Key RightSelectKey;
     Keyboard::Key attackKey;
+    Keyboard::Key HealKey;
     vector<Entity *> *enemies;
 };
 

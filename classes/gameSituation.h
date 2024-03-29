@@ -5,10 +5,15 @@
 #ifndef CARD_GAME_GAMESITUATION_H
 #define CARD_GAME_GAMESITUATION_H
 
+using namespace std;
+using namespace sf;
+
 enum GameSituation {
     IDLE,
     ENEMY_TURN,
     PLAYER_TURN,
     LOOTING,
 };
+string GameState = "Start";
+int GameWave = 0;
 #endif //CARD_GAME_GAMESITUATION_H

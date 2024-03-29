@@ -11,9 +11,6 @@ using namespace std;
 float width = 1920;
 float height = 1080;
 
-string GameState = "Start";
-int GameWave = 0;
-
 
 void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<Entity *> *enemies, Player *player) {
     GameState = "Fight";
@@ -39,17 +36,17 @@ int main() {
     //List of all the enemies
     vector<Entity *> enemies;
 
-    Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::Right, &enemies);
+    Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H, Keyboard::Key::Right, &enemies);
 
 
     while (window.isOpen()) {
 
-        sf::Event event{};
+        Event event{};
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
                 window.close();
             switch (event.type) {
-                case sf::Event::Closed:
+                case Event::Closed:
                     window.close();
                     break;
                 case Event::KeyReleased:
@@ -63,6 +60,13 @@ int main() {
         if (GameState == "Wave") {
             enemies.clear();
             enemySpawn(&window, &gameSituation, &enemies, &player);
+            player.setSelectedEnemy(1);
+        }
+        for (int i = 1; i < enemies.size(); i++) {
+            auto entity = enemies[i];
+            if (entity->markedForRemoval()) {
+                enemies.erase(enemies.begin() + i);
+            }
         }
 
 
@@ -71,6 +75,7 @@ int main() {
         }
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::O)) {
             GameState = "Wave";
+            GameWave += 1;
         }
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)) {
             gameSituation = ENEMY_TURN;
