@@ -12,9 +12,9 @@
 using namespace sf;
 using namespace std;
 
-enum PlayerOrNot {
+enum PlayerOrEnemy {
     PLAYER,
-    NOT,
+    ENEMY,
 };
 
 class Entity {
@@ -29,7 +29,7 @@ public:
 
     virtual void update() = 0;
 
-    void initializeHealthBar(PlayerOrNot playerOrNot) {
+    void initializeHealthBar(PlayerOrEnemy playerOrEnemy) {
 
         HealthBar.setFillColor(Color::Green);
 
@@ -37,7 +37,7 @@ public:
         HealthContainer.setOutlineColor(Color::Blue);
         HealthContainer.setOutlineThickness(2);
 
-        if (playerOrNot == PlayerOrNot::NOT) {
+        if (playerOrEnemy == PlayerOrEnemy::ENEMY) {
             healthWidth = 100;
             HealthBar.setSize(Vector2f(healthWidth, 25));
             HealthBar.setPosition(entity.getPosition().x, entity.getPosition().y - entity.getSize().y);

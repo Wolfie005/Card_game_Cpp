@@ -13,7 +13,7 @@ public:
 
         entity.setPosition(positionX, (float) window->getSize().y / 3.0f);
         damage = 5;
-        initializeHealthBar(NOT);
+        initializeHealthBar(ENEMY);
     }
 
     void update() override {
