@@ -65,18 +65,28 @@ public:
     }
 
     void receiveDamage(float _damage) {
-        health -= _damage;
+        float toDeal = _damage;
+        if (guard > 0) {
+            toDeal = abs(guard -= _damage);
+        }
+        if (toDeal > 0 && guard <= 0) {
+            health -= toDeal;
+        }
+
     }
 
-    void doDamage(Entity *opponent) const {
+
+    void doDamage(Entity *opponent) {
         opponent->receiveDamage(damage);
     }
+
     virtual bool markedForRemoval() = 0;
 
 
 protected:
     float healthWidth;
     float damage;
+    float guard;
     float initialHealth;
     float health;
     RenderWindow *window;

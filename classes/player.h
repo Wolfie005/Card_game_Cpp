@@ -14,13 +14,14 @@ using namespace std;
 
 class Player : public Entity {
 public:
-    Player(GameSituation *situation, RenderWindow *currentWindow, Keyboard::Key attackKey, Keyboard::Key HealKey, Keyboard::Key EnergyReplenishKey , Keyboard::Key RightSelectKey,
+    Player(GameSituation *situation, RenderWindow *currentWindow, Keyboard::Key attackKey, Keyboard::Key HealKey, Keyboard::Key GuardKey, Keyboard::Key EnergyReplenishKey , Keyboard::Key RightSelectKey,
            vector<Entity *> *enemies, int energyToken)
-            : Entity(situation, currentWindow, 100), enemies(enemies), attackKey(attackKey), HealKey(HealKey),EnergyReplenishKey(EnergyReplenishKey),
+            : Entity(situation, currentWindow, 100), enemies(enemies), attackKey(attackKey), HealKey(HealKey), GuardKey(GuardKey),EnergyReplenishKey(EnergyReplenishKey),
               RightSelectKey(RightSelectKey) , energyToken(energyToken){
 
         entity.setPosition((float) window->getSize().x / 2.0f, (float) window->getSize().y / 1.5f);
         damage = 5;
+        guard = 0;
         initializeHealthBar(PLAYER);
     }
 
@@ -68,6 +69,11 @@ public:
             cout << energyToken << endl;
         }
 
+        if (KeyHandler::getInstance().isKeyTrigger(GuardKey)){
+            guard += 10;
+            cout << guard << endl;
+        }
+
 
 
     }
@@ -83,6 +89,7 @@ private:
     int SelectedEnemy = 1;
     int energyToken;
     Keyboard::Key EnergyReplenishKey;
+    Keyboard::Key GuardKey;
     Keyboard::Key RightSelectKey;
     Keyboard::Key attackKey;
     Keyboard::Key HealKey;

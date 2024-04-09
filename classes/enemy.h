@@ -13,13 +13,14 @@ public:
 
         entity.setPosition(positionX, (float) window->getSize().y / 3.0f);
         damage = 5;
+        guard = 0;
         initializeHealthBar(ENEMY);
     }
 
     void update() override {
         if (health <= 0) return;
         window->draw(entity);
-        if (*situation != GameSituation::ENEMY_TURN)return;
+        if (*situation != GameSituation::ENEMY_TURN) return;
         *situation = GameSituation::PLAYER_TURN;
         for (int i = 0; i < 3; i++) {
             doDamage(player);

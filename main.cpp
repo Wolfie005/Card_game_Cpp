@@ -36,8 +36,7 @@ int main() {
     //List of all the enemies
     vector<Entity *> enemies;
 
-    Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H, Keyboard::Key::U , Keyboard::Key::Right, &enemies,3);
-
+    Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H,Keyboard::Key::G,Keyboard::Key::U , Keyboard::Key::Right, &enemies,3);
 
     while (window.isOpen()) {
 
