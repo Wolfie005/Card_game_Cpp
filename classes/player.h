@@ -71,12 +71,15 @@ public:
 
         if (KeyHandler::getInstance().isKeyTrigger(GuardKey)){
             guard += 10;
+            energyToken -= 1;
+            cout << energyToken << endl;
             cout << guard << endl;
         }
 
 
 
     }
+
     bool markedForRemoval() override{
         return false;
     }

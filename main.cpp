@@ -17,7 +17,7 @@ void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<En
     for (int i = 0; i < 3; i++) {
         float xPos = ((float) currentWindow->getSize().x - (float) currentWindow->getSize().x / 3.0f * 2) / 2.0f +
                      (float) i * ((float) currentWindow->getSize().x / 3.0f);
-        enemies->emplace_back(new Enemy(situation, currentWindow, xPos, player));
+        enemies->emplace_back(new Enemy(situation, currentWindow, xPos, player, enemies));
     }
 }
 
@@ -75,6 +75,7 @@ int main() {
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::O)) {
             GameState = "Wave";
             GameWave += 1;
+            gameSituation = PLAYER_TURN;
         }
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)) {
             gameSituation = ENEMY_TURN;
