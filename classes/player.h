@@ -23,6 +23,11 @@ public:
         damage = 5;
         guard = 0;
         initializeHealthBar(PLAYER);
+        if (!font.loadFromFile("../fonts/Roboto-Light.ttf")) {
+            cout << "Error loading font";
+            exit(1);
+        }
+        playerAttack.setFont(font);
     }
 
 
@@ -36,6 +41,10 @@ public:
         }
 
         window->draw(entity);
+
+        playerAttack.setOrigin(playerAttack.getGlobalBounds().width / 2, playerAttack.getGlobalBounds().height / 2);
+        playerAttack.setPosition(entity.getPosition().x, entity.getPosition().y - 150);
+        window->draw(playerAttack);
 
 
         if (SelectedEnemy > enemies->size() - 1 && !enemies->empty()){
@@ -53,6 +62,7 @@ public:
             for (auto entity : *enemies){
                 entity->ResetGuard();
             }
+            playerAttack.setString("Attack");
             cout << energyToken << endl;
         }
 
@@ -64,17 +74,20 @@ public:
         if (KeyHandler::getInstance().isKeyTrigger(HealKey) && health + 10 <= initialHealth && energyToken - 1 >= 0){
             health += 10;
             energyToken -= 1;
+            playerAttack.setString("Heal");
             cout << energyToken << endl;
         }
 
         if (KeyHandler::getInstance().isKeyTrigger(EnergyReplenishKey) && energyToken + 1 <= 10){
             energyToken += 1;
+            playerAttack.setString("Replenish");
             cout << energyToken << endl;
         }
 
         if (KeyHandler::getInstance().isKeyTrigger(GuardKey)){
             guard += 10;
             energyToken -= 1;
+            playerAttack.setString("Guard");
             cout << energyToken << endl;
             cout << guard << endl;
         }
@@ -92,6 +105,8 @@ public:
     }
 
 private:
+    Font font;
+    Text playerAttack;
     int SelectedEnemy = 1;
     int energyToken;
     Keyboard::Key EnergyReplenishKey;
