@@ -41,6 +41,7 @@ public:
         }
 
         window->draw(entity);
+        energyDisplay(energyToken);
 
         playerAttack.setOrigin(playerAttack.getGlobalBounds().width / 2, playerAttack.getGlobalBounds().height / 2);
         playerAttack.setPosition(entity.getPosition().x, entity.getPosition().y - 150);

@@ -25,6 +25,12 @@ public:
         entity.setSize(Vector2f(50, 100));
         entity.setOrigin(entity.getSize().x / 2, entity.getSize().y / 2);
         entity.setFillColor(Color::White);
+
+        if (!font.loadFromFile("../fonts/Roboto-Light.ttf")) {
+            cout << "Error loading font";
+            exit(1);
+        }
+        energy.setFont(font);
     }
 
     virtual void update() = 0;
@@ -64,6 +70,14 @@ public:
         window->draw(HealthBar);
     }
 
+    void energyDisplay(int energyToken){
+        energy.setOrigin(energy.getGlobalBounds().width / 2, energy.getGlobalBounds().height / 2);
+        energy.setPosition(HealthBar.getPosition().x, HealthBar.getPosition().y + 50);
+
+        energy.setString(to_string(energyToken) + " / 10");
+        window->draw(energy);
+    }
+
     void receiveDamage(float _damage) {
         float toDeal = _damage;
         if (guard > 0) {
@@ -88,6 +102,8 @@ public:
 
 
 protected:
+    Font font;
+    Text energy;
     float healthWidth;
     float damage;
     float guard;
