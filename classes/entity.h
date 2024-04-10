@@ -70,6 +70,8 @@ public:
         window->draw(HealthBar);
     }
 
+
+
     void energyDisplay(int energyToken){
         energy.setOrigin(energy.getGlobalBounds().width / 2, energy.getGlobalBounds().height / 2);
         energy.setPosition(HealthBar.getPosition().x, HealthBar.getPosition().y + 50);
@@ -78,6 +80,26 @@ public:
         window->draw(energy);
     }
 
+    void characterDisplay(const string& FilePath){
+        CharacterImg.loadFromFile(FilePath);
+        Character.setTexture(CharacterImg);
+        Character.setOrigin(Character.getGlobalBounds().width / 2, Character.getGlobalBounds().height / 2);
+        Character.setPosition(HealthBar.getPosition().x - 200, HealthBar.getPosition().y);
+        Character.setScale(0.5f, 0.5f);
+
+        CharacterContainer.setSize(Vector2f(Character.getGlobalBounds().width + 2, Character.getGlobalBounds().height + 2));
+        CharacterContainer.setOrigin(CharacterContainer.getSize().x / 2, CharacterContainer.getSize().y / 2);
+        CharacterContainer.setPosition(Character.getPosition().x, Character.getPosition().y);
+        CharacterContainer.setOutlineColor(Color::Blue);
+        CharacterContainer.setOutlineThickness(2);
+        CharacterContainer.setFillColor(Color::Transparent);
+    }
+
+    void updateCharacterDisplay(){
+        window->draw(Character);
+        window->draw(CharacterContainer);
+
+    }
     void receiveDamage(float _damage) {
         float toDeal = _damage;
         if (guard > 0) {
@@ -100,15 +122,30 @@ public:
 
     virtual bool markedForRemoval() = 0;
 
+    void setIsSelected(bool isSelected) {
+        if (isSelected) {
+            entity.setOutlineColor(Color::Red);
+            entity.setOutlineThickness(2);
+        } else {
+            entity.setOutlineThickness(0);
+        }
+    }
+
 
 protected:
+    Texture CharacterImg;
+    Sprite Character;
+    RectangleShape CharacterContainer;
+
     Font font;
     Text energy;
+
     float healthWidth;
     float damage;
     float guard;
     float initialHealth;
     float health;
+
     RenderWindow *window;
     RectangleShape entity;
     GameSituation *situation;

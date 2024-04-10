@@ -38,6 +38,7 @@ public:
             *situation = GameSituation::PLAYER_TURN;
             *enemiesPlayed = 0;
         }
+
         if (*situation != GameSituation::ENEMY_TURN) return;
         (*enemiesPlayed)++;
         mt19937 &engine = RandomEngine::getInstance().getEngine();
@@ -46,21 +47,15 @@ public:
         if (enemyAttackType == 0) {
             doDamage(player);
             enemyAttack.setString("Attack");
-            cout << "enemy" << endl;
-            cout << health << endl << guard << endl;
         }
 
         if (enemyAttackType == 1) {
             guard += 10;
             enemyAttack.setString("Defend");
-            cout << "enemy" << endl;
-            cout << health << endl << guard << endl;
         }
 
         if (enemyAttackType == 2) {
             enemyAttack.setString("Miss");
-            cout << "enemy" << endl;
-            cout << health << endl << guard << endl;
         }
     }
 
@@ -74,5 +69,4 @@ private:
     Player *player;
     vector<Entity *> *enemies;
     int *enemiesPlayed;
-
 };

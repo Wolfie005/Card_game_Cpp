@@ -12,7 +12,8 @@ float width = 1920;
 float height = 1080;
 
 
-void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<Entity *> *enemies, Player *player, int* enemiesPlayed) {
+void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<Entity *> *enemies, Player *player,
+                int *enemiesPlayed) {
     GameState = "Fight";
     for (int i = 0; i < 3; i++) {
         float xPos = ((float) currentWindow->getSize().x - (float) currentWindow->getSize().x / 3.0f * 2) / 2.0f +
@@ -34,7 +35,10 @@ int main() {
     vector<Entity *> enemies;
     int enemiesPlayed = 0;
 
-    Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H,Keyboard::Key::G,Keyboard::Key::U , Keyboard::Key::Right, &enemies,3);
+    Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H, Keyboard::Key::G, Keyboard::Key::U,
+                  Keyboard::Key::Right, &enemies, 0);
+
+
 
     while (window.isOpen()) {
 
@@ -58,8 +62,15 @@ int main() {
             enemies.clear();
             enemySpawn(&window, &gameSituation, &enemies, &player, &enemiesPlayed);
             player.setSelectedEnemy(1);
+            GameWave += 1;
         }
-        for (int i = 1; i < enemies.size(); i++) {
+
+        if (enemies.empty()) {
+            GameState = "Wave";
+            gameSituation = PLAYER_TURN;
+        }
+
+        for (int i = 0; i < enemies.size(); i++) {
             auto entity = enemies[i];
             if (entity->markedForRemoval()) {
                 enemies.erase(enemies.begin() + i);
@@ -72,7 +83,6 @@ int main() {
         }
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::O)) {
             GameState = "Wave";
-            GameWave += 1;
             gameSituation = PLAYER_TURN;
         }
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)) {
@@ -89,10 +99,13 @@ int main() {
 
 
         //update and display
-        for (auto entity: enemies) {
+        for (int i = 0; i < enemies.size(); ++i) {
+            auto entity = enemies[i];
             entity->update();
             entity->updateHealthBar();
+            entity->setIsSelected(i == player.getSelected());
         }
+
         player.updateHealthBar();
         player.update();
         window.display();
