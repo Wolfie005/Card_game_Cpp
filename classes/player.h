@@ -50,6 +50,9 @@ public:
             doDamage(enemies->at(SelectedEnemy));
             energyToken -= 1;
             *situation = GameSituation::ENEMY_TURN;
+            for (auto entity : *enemies){
+                entity->ResetGuard();
+            }
             cout << energyToken << endl;
         }
 

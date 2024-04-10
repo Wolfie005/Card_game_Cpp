@@ -12,12 +12,12 @@ float width = 1920;
 float height = 1080;
 
 
-void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<Entity *> *enemies, Player *player) {
+void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<Entity *> *enemies, Player *player, int* enemiesPlayed) {
     GameState = "Fight";
     for (int i = 0; i < 3; i++) {
         float xPos = ((float) currentWindow->getSize().x - (float) currentWindow->getSize().x / 3.0f * 2) / 2.0f +
                      (float) i * ((float) currentWindow->getSize().x / 3.0f);
-        enemies->emplace_back(new Enemy(situation, currentWindow, xPos, player, enemies));
+        enemies->emplace_back(new Enemy(situation, currentWindow, xPos, player, enemies, enemiesPlayed));
     }
 }
 
@@ -30,11 +30,9 @@ int main() {
 
     GameSituation gameSituation = IDLE;
 
-
-
-
     //List of all the enemies
     vector<Entity *> enemies;
+    int enemiesPlayed = 0;
 
     Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H,Keyboard::Key::G,Keyboard::Key::U , Keyboard::Key::Right, &enemies,3);
 
@@ -58,7 +56,7 @@ int main() {
 
         if (GameState == "Wave") {
             enemies.clear();
-            enemySpawn(&window, &gameSituation, &enemies, &player);
+            enemySpawn(&window, &gameSituation, &enemies, &player, &enemiesPlayed);
             player.setSelectedEnemy(1);
         }
         for (int i = 1; i < enemies.size(); i++) {

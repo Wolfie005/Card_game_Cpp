@@ -21,6 +21,7 @@ add_executable(Card_game main.cpp
         classes/enemy.h
         classes/entity.h
         classes/KeyHandler.h
-        classes/randomEngine.h)
+        classes/randomEngine.h
+)
 
 target_link_libraries(Card_game sfml-system sfml-window sfml-graphics sfml-audio)

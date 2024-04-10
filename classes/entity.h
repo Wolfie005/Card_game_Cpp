@@ -76,8 +76,12 @@ public:
     }
 
 
-    void doDamage(Entity *opponent) {
+    void doDamage(Entity *opponent) const{
         opponent->receiveDamage(damage);
+    }
+
+    void ResetGuard(){
+        guard = 0;
     }
 
     virtual bool markedForRemoval() = 0;
