@@ -31,7 +31,10 @@ public:
             exit(1);
         }
         energy.setFont(font);
+
+
     }
+
 
     virtual void update() = 0;
 
@@ -71,8 +74,7 @@ public:
     }
 
 
-
-    void energyDisplay(int energyToken){
+    void energyDisplay(int energyToken) {
         energy.setOrigin(energy.getGlobalBounds().width / 2, energy.getGlobalBounds().height / 2);
         energy.setPosition(HealthBar.getPosition().x, HealthBar.getPosition().y + 50);
 
@@ -80,8 +82,8 @@ public:
         window->draw(energy);
     }
 
-    void characterDisplay(const string& FilePath){
-        CharacterImg.loadFromFile(FilePath);
+    void characterDisplay(const string& CharacterFilePath, const string& SwordFilePath, const string& ShieldFilePath){
+        CharacterImg.loadFromFile(CharacterFilePath);
         Character.setTexture(CharacterImg);
         Character.setOrigin(Character.getGlobalBounds().width / 2, Character.getGlobalBounds().height / 2);
         Character.setPosition(HealthBar.getPosition().x - 200, HealthBar.getPosition().y);
@@ -93,13 +95,60 @@ public:
         CharacterContainer.setOutlineColor(Color::Blue);
         CharacterContainer.setOutlineThickness(2);
         CharacterContainer.setFillColor(Color::Transparent);
+
+        SwordImg.loadFromFile(SwordFilePath);
+        Sword.setTexture(SwordImg);
+        Sword.setOrigin(Sword.getGlobalBounds().width / 2, Sword.getGlobalBounds().height / 2);
+        Sword.setPosition(Character.getPosition().x + 50, Character.getPosition().y + 50);
+        Sword.setScale(0.2f, 0.2f);
+
+        SwordContainer.setSize(Vector2f(Sword.getGlobalBounds().width - 2, Sword.getGlobalBounds().height - 2));
+        SwordContainer.setOrigin(SwordContainer.getSize().x / 2, SwordContainer.getSize().y / 2);
+        SwordContainer.setPosition(Sword.getPosition().x, Sword.getPosition().y);
+        SwordContainer.setOutlineColor(Color::Blue);
+        SwordContainer.setOutlineThickness(2);
+        SwordContainer.setFillColor(Color::Transparent);
+
+        ShieldImg.loadFromFile(ShieldFilePath);
+        Shield.setTexture(ShieldImg);
+        Shield.setOrigin(Shield.getGlobalBounds().width / 2, Shield.getGlobalBounds().height / 2);
+        Shield.setPosition(Character.getPosition().x - 50, Character.getPosition().y + 50);
+        Shield.setScale(0.23f, 0.18f);
+
+        ShieldContainer.setSize(Vector2f(Shield.getGlobalBounds().width - 2, Shield.getGlobalBounds().height - 2));
+        ShieldContainer.setOrigin(ShieldContainer.getSize().x / 2, ShieldContainer.getSize().y / 2);
+        ShieldContainer.setPosition(Shield.getPosition().x, Shield.getPosition().y);
+        ShieldContainer.setOutlineColor(Color::Blue);
+        ShieldContainer.setOutlineThickness(2);
+        ShieldContainer.setFillColor(Color::Transparent);
+
+        DamageDisplay.setString(to_string((int)damage));
+        DamageDisplay.setFont(font);
+        DamageDisplay.setOrigin((DamageDisplay.getGlobalBounds().width / 2) + 3, (DamageDisplay.getGlobalBounds().height / 2) + 7);
+        DamageDisplay.setPosition(Sword.getPosition().x , Sword.getPosition().y + 50);
+
+        GuardDisplay.setString(to_string((int)guardAmount));
+        GuardDisplay.setFont(font);
+        GuardDisplay.setOrigin((GuardDisplay.getGlobalBounds().width / 2) + 3, (GuardDisplay.getGlobalBounds().height / 2) + 7);
+        GuardDisplay.setPosition(Shield.getPosition().x, Shield.getPosition().y + 50);
+
+
     }
 
     void updateCharacterDisplay(){
         window->draw(Character);
         window->draw(CharacterContainer);
 
+        window->draw(Sword);
+        window->draw(SwordContainer);
+        window->draw(DamageDisplay);
+
+        window->draw(Shield);
+        window->draw(ShieldContainer);
+        window->draw(GuardDisplay);
+
     }
+
     void receiveDamage(float _damage) {
         float toDeal = _damage;
         if (guard > 0) {
@@ -112,11 +161,11 @@ public:
     }
 
 
-    void doDamage(Entity *opponent) const{
+    void doDamage(Entity *opponent) const {
         opponent->receiveDamage(damage);
     }
 
-    void ResetGuard(){
+    void ResetGuard() {
         guard = 0;
     }
 
@@ -136,6 +185,15 @@ protected:
     Texture CharacterImg;
     Sprite Character;
     RectangleShape CharacterContainer;
+    Texture SwordImg;
+    Sprite Sword;
+    RectangleShape SwordContainer;
+    Texture ShieldImg;
+    Sprite Shield;
+    RectangleShape ShieldContainer;
+    Text DamageDisplay;
+    Text GuardDisplay;
+
 
     Font font;
     Text energy;
@@ -143,6 +201,7 @@ protected:
     float healthWidth;
     float damage;
     float guard;
+    float guardAmount;
     float initialHealth;
     float health;
 

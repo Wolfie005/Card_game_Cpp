@@ -24,8 +24,9 @@ public:
         entity.setPosition((float) window->getSize().x / 2.0f, (float) window->getSize().y / 1.5f);
         damage = 5;
         guard = 0;
+        guardAmount = 10;
         initializeHealthBar(PLAYER);
-        characterDisplay("../img/character.png");
+        characterDisplay("../img/character.png", "../img/sword.png", "../img/shield.png");
         if (!font.loadFromFile("../fonts/Roboto-Light.ttf")) {
             cout << "Error loading font";
             exit(1);
@@ -93,7 +94,7 @@ public:
         }
 
         if (KeyHandler::getInstance().isKeyTrigger(GuardKey)) {
-            guard += 10;
+            guard += guardAmount;
             energyToken -= 1;
             playerAttack.setString("Guard");
         }
