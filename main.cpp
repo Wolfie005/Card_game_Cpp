@@ -4,7 +4,8 @@
 #include "./classes/enemy.h"
 #include "classes/gameSituation.h"
 #include "classes/KeyHandler.h"
-#include "classes//Item.h"
+#include "classes/Item.h"
+#include "classes/cards.h"
 
 using namespace sf;
 using namespace std;
@@ -23,6 +24,14 @@ void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<En
         enemies->emplace_back(pEnemy);
     }
 }
+void setHand(RenderWindow *currentWindow, GameSituation *situation, vector<Cards *> *cards){
+    for (int i = 0; i < 3; i++) {
+        float xPos2 = ((float) currentWindow->getSize().x - 150) - ((float) i * (250));
+        auto *pCard = new Cards(situation, currentWindow, xPos2);
+        cards->emplace_back(pCard);
+    }
+}
+
 
 int main() {
     KeyHandler::getInstance();
@@ -60,6 +69,9 @@ int main() {
     int enemiesPlayed = 0;
     Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H, Keyboard::Key::G, Keyboard::Key::U,
                   Keyboard::Key::Right, &enemies, 0);
+    vector<Cards *> cards;
+
+
 
 
     while (window.isOpen()) {
@@ -86,6 +98,9 @@ int main() {
             enemySpawn(&window, &gameSituation, &enemies, &player, &enemiesPlayed);
             player.setSelectedEnemy(1);
             gameSituation = GameSituation::PLAYER_TURN;
+        }
+        if (gameSituation == GameSituation::PLAYER_TURN){
+            setHand(&window, &gameSituation, &cards);
         }
 
         if (enemies.empty()) {
@@ -165,6 +180,11 @@ int main() {
                 entity->updateHealthBar();
                 entity->setIsSelected(i == player.getSelected());
             }
+            for (int i = 0; i < cards.size(); ++i) {
+                auto card = cards[i];
+                card->update();
+            }
+
             Wave.setString("Wave : " + to_string(GameWave));
             Wave.setOrigin(Wave.getGlobalBounds().width / 2, Wave.getGlobalBounds().height / 2);
             Wave.setPosition(100, 100);

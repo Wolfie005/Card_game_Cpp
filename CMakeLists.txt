@@ -23,6 +23,11 @@ add_executable(Card_game main.cpp
         classes/KeyHandler.h
         classes/randomEngine.h
         classes/Item.h
+        classes/cards.h
+        classes/cards_Attack.h
+        classes/cards_Defens.h
+        classes/cards_Buff.h
+        classes/cards_Debuff.h
 )
 
 target_link_libraries(Card_game sfml-system sfml-window sfml-graphics sfml-audio)
