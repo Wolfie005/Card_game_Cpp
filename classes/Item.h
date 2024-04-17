@@ -73,12 +73,12 @@ public:
         if (0 <= RarityType && RarityType <= 700000) {
             Rarity = 0.2f;
         }
-        if ((700001 <= RarityType && RarityType <= 950001) && GameWave >= 10) {
+        if ((700001 <= RarityType && RarityType <= 950001) && GameWave >= 20) {
             Rarity = 2.0f;
         } else {
             Rarity = 0.2f;
         }
-        if ((950001 <= RarityType && RarityType <= 1000000) && GameWave >= 20) {
+        if ((950001 <= RarityType && RarityType <= 1000000) && GameWave >= 50) {
             Rarity = 20.0f;
         } else {
             Rarity = 0.2f;

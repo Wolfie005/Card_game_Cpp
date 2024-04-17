@@ -16,5 +16,5 @@ enum GameSituation {
     CHOICE
 };
 string GameState = "Start";
-int GameWave = 1;
+int GameWave = 0;
 #endif //CARD_GAME_GAMESITUATION_H

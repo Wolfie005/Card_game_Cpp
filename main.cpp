@@ -51,11 +51,16 @@ int main() {
     question2.setFont(font);
     question2.setOrigin(question2.getGlobalBounds().width / 2, question2.getGlobalBounds().height / 2);
     question2.setPosition((float) window.getSize().x / 2, (float) window.getSize().y / 2);
+    Text Wave;
+    Wave.setFont(font);
+
+
 
     vector<Entity *> enemies;
     int enemiesPlayed = 0;
     Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H, Keyboard::Key::G, Keyboard::Key::U,
                   Keyboard::Key::Right, &enemies, 0);
+
 
     while (window.isOpen()) {
 
@@ -76,15 +81,18 @@ int main() {
         }
 
         if (GameState == "Wave") {
+            GameWave += 1;
             enemies.clear();
             enemySpawn(&window, &gameSituation, &enemies, &player, &enemiesPlayed);
             player.setSelectedEnemy(1);
-            GameWave += 1;
+            gameSituation = GameSituation::PLAYER_TURN;
         }
 
         if (enemies.empty()) {
             GameState = "Wave";
-            gameSituation = PLAYER_TURN;
+            if (GameWave %10 == 0){
+                gameSituation = LOOTING;
+            }
         }
 
         for (int i = 0; i < enemies.size(); i++) {
@@ -104,7 +112,6 @@ int main() {
         }
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)) {
             gameSituation = LOOTING;
-            //TODO
         }
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::E)) {
             gameSituation = PLAYER_TURN;
@@ -129,6 +136,12 @@ int main() {
             }
 
         } else if (gameSituation == GameSituation::CHOICE) {
+            Text Weapon;
+            Weapon.setString("Damage : " + to_string((int)player.getTempItem()->getDamage()) + " " + "Guard : " + to_string((int)player.getTempItem()->getGuard()));
+            Weapon.setFont(font);
+            Weapon.setOrigin(Weapon.getGlobalBounds().width / 2, Weapon.getGlobalBounds().height / 2);
+            Weapon.setPosition((float) window.getSize().x / 2, (float) window.getSize().y / 2 - 200);
+            window.draw(Weapon);
             window.draw(question2);
             if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Num1)) {
                 if (player.getTempItemType() == WeaponType::SHIELD) {
@@ -152,7 +165,10 @@ int main() {
                 entity->updateHealthBar();
                 entity->setIsSelected(i == player.getSelected());
             }
-
+            Wave.setString("Wave : " + to_string(GameWave));
+            Wave.setOrigin(Wave.getGlobalBounds().width / 2, Wave.getGlobalBounds().height / 2);
+            Wave.setPosition(100, 100);
+            window.draw(Wave);
             player.updateHealthBar();
             player.update();
         }

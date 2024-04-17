@@ -15,8 +15,8 @@ public:
             enemiesPlayed(enemiesPlayed) {
 
         entity.setPosition(positionX, (float) window->getSize().y / 3.0f);
-        Weapon.setDamage(Weapon.getDamage() * GameWave);
-        Shield.setGuard(Shield.getGuard() * GameWave);
+        Weapon.setDamage(Weapon.getDamage() * (float)GameWave);
+        Shield.setGuard(Shield.getGuard() * (float)GameWave);
         initializeHealthBar(ENEMY);
         cout << "enemy Damage:" << Weapon.getDamage() << endl;
 
