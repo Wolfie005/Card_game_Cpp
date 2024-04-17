@@ -4,6 +4,7 @@
 #include "./classes/enemy.h"
 #include "classes/gameSituation.h"
 #include "classes/KeyHandler.h"
+#include "classes//Item.h"
 
 using namespace sf;
 using namespace std;
@@ -18,7 +19,8 @@ void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<En
     for (int i = 0; i < 3; i++) {
         float xPos = ((float) currentWindow->getSize().x - (float) currentWindow->getSize().x / 3.0f * 2) / 2.0f +
                      (float) i * ((float) currentWindow->getSize().x / 3.0f);
-        enemies->emplace_back(new Enemy(situation, currentWindow, xPos, player, enemies, enemiesPlayed));
+        auto *pEnemy = new Enemy(situation, currentWindow, xPos, player, enemies, enemiesPlayed);
+        enemies->emplace_back(pEnemy);
     }
 }
 
@@ -31,14 +33,29 @@ int main() {
 
     GameSituation gameSituation = IDLE;
 
+    Font font;
+    if (!font.loadFromFile("../fonts/Roboto-Light.ttf")) {
+        cout << "Error loading font";
+        exit(1);
+    }
+
+
     //List of all the enemies
+    Text question;
+    question.setString("If you want sword click 1, if you want shield click 2");
+    question.setFont(font);
+    question.setOrigin(question.getGlobalBounds().width / 2, question.getGlobalBounds().height / 2);
+    question.setPosition((float) window.getSize().x / 2, (float) window.getSize().y / 2);
+    Text question2;
+    question2.setString("Do you want this weapon click 1 if yes and 2 if no");
+    question2.setFont(font);
+    question2.setOrigin(question2.getGlobalBounds().width / 2, question2.getGlobalBounds().height / 2);
+    question2.setPosition((float) window.getSize().x / 2, (float) window.getSize().y / 2);
+
     vector<Entity *> enemies;
     int enemiesPlayed = 0;
-
     Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H, Keyboard::Key::G, Keyboard::Key::U,
                   Keyboard::Key::Right, &enemies, 0);
-
-
 
     while (window.isOpen()) {
 
@@ -86,7 +103,8 @@ int main() {
             gameSituation = PLAYER_TURN;
         }
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)) {
-            gameSituation = ENEMY_TURN;
+            gameSituation = LOOTING;
+            //TODO
         }
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::E)) {
             gameSituation = PLAYER_TURN;
@@ -98,18 +116,49 @@ int main() {
         window.clear(Color::Black);
 
 
-        //update and display
-        for (int i = 0; i < enemies.size(); ++i) {
-            auto entity = enemies[i];
-            entity->update();
-            entity->updateHealthBar();
-            entity->setIsSelected(i == player.getSelected());
+        if (gameSituation == GameSituation::LOOTING) {
+            window.draw(question);
+            if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Num1)) {
+
+                player.setTempItem(new Item(&gameSituation, WeaponType::SWORD, &GameWave));
+                gameSituation = GameSituation::CHOICE;
+            }
+            if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Num2)) {
+                player.setTempItem(new Item(&gameSituation, WeaponType::SHIELD, &GameWave));
+                gameSituation = GameSituation::CHOICE;
+            }
+
+        } else if (gameSituation == GameSituation::CHOICE) {
+            window.draw(question2);
+            if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Num1)) {
+                if (player.getTempItemType() == WeaponType::SHIELD) {
+                    player.setShield(*player.getTempItem());
+                }
+                if (player.getTempItemType() == WeaponType::SWORD) {
+                    player.setWeapon(*player.getTempItem());
+                }
+                gameSituation = GameSituation::PLAYER_TURN;
+            }
+
+            if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Num2)) {
+                gameSituation = GameSituation::PLAYER_TURN;
+            }
+
+        } else {
+            //update and display
+            for (int i = 0; i < enemies.size(); ++i) {
+                auto entity = enemies[i];
+                entity->update();
+                entity->updateHealthBar();
+                entity->setIsSelected(i == player.getSelected());
+            }
+
+            player.updateHealthBar();
+            player.update();
         }
 
-        player.updateHealthBar();
-        player.update();
-        window.display();
 
+        window.display();
     }
 
 }

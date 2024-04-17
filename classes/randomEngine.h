@@ -22,8 +22,8 @@ public:
         return instance;
     }
 
-    mt19937 &getEngine(){
-        return this->engine;
+    mt19937 *getEngine(){
+        return &this->engine;
     }
 
     RandomEngine(const RandomEngine &) = delete;

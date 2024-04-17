@@ -22,9 +22,7 @@ public:
               RightSelectKey(RightSelectKey), energyToken(energyToken) {
 
         entity.setPosition((float) window->getSize().x / 2.0f, (float) window->getSize().y / 1.5f);
-        damage = 5;
         guard = 0;
-        guardAmount = 10;
         initializeHealthBar(PLAYER);
         characterDisplay("../img/character.png", "../img/sword.png", "../img/shield.png");
         if (!font.loadFromFile("../fonts/Roboto-Light.ttf")) {
@@ -93,8 +91,8 @@ public:
             playerAttack.setString("Replenish");
         }
 
-        if (KeyHandler::getInstance().isKeyTrigger(GuardKey)) {
-            guard += guardAmount;
+        if (KeyHandler::getInstance().isKeyTrigger(GuardKey) && energyToken - 1 >= 0) {
+            guard += Shield.getGuard();
             energyToken -= 1;
             playerAttack.setString("Guard");
         }

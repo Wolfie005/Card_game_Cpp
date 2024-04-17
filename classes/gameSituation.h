@@ -13,6 +13,7 @@ enum GameSituation {
     ENEMY_TURN,
     PLAYER_TURN,
     LOOTING,
+    CHOICE
 };
 string GameState = "Start";
 int GameWave = 1;

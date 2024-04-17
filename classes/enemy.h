@@ -15,9 +15,10 @@ public:
             enemiesPlayed(enemiesPlayed) {
 
         entity.setPosition(positionX, (float) window->getSize().y / 3.0f);
-        damage = 5.0f * (float) GameWave;
-        guard = 0;
+        Weapon.setDamage(Weapon.getDamage() * GameWave);
+        Shield.setGuard(Shield.getGuard() * GameWave);
         initializeHealthBar(ENEMY);
+        cout << "enemy Damage:" << Weapon.getDamage() << endl;
 
         if (!font.loadFromFile("../fonts/Roboto-Light.ttf")) {
             cout << "Error loading font";
@@ -37,20 +38,21 @@ public:
         if (*enemiesPlayed == enemies->size()) {
             *situation = GameSituation::PLAYER_TURN;
             *enemiesPlayed = 0;
+            player->ResetGuard();
         }
 
         if (*situation != GameSituation::ENEMY_TURN) return;
         (*enemiesPlayed)++;
-        mt19937 &engine = RandomEngine::getInstance().getEngine();
+        mt19937 *engine = RandomEngine::getInstance().getEngine();
         uniform_int_distribution<> distribution(0, 2);
-        int enemyAttackType = distribution(engine);
+        int enemyAttackType = distribution(*engine);
         if (enemyAttackType == 0) {
             doDamage(player);
             enemyAttack.setString("Attack");
         }
 
         if (enemyAttackType == 1) {
-            guard += 10;
+            guard += Shield.getGuard();
             enemyAttack.setString("Defend");
         }
 

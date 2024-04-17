@@ -7,6 +7,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "gameSituation.h"
+#include "Item.h"
 
 
 using namespace sf;
@@ -20,7 +21,9 @@ enum PlayerOrEnemy {
 class Entity {
 public:
     Entity(GameSituation *situation, RenderWindow *currentWindow, int health) :
-            situation(situation), window(currentWindow), initialHealth((float) health), health((float) health) {
+            situation(situation), window(currentWindow), initialHealth((float) health), health((float) health),
+            Shield(*new Item(situation, WeaponType::BASE, &GameWave)),
+            Weapon(*new Item(situation, WeaponType::BASE, &GameWave)) {
 
         entity.setSize(Vector2f(50, 100));
         entity.setOrigin(entity.getSize().x / 2, entity.getSize().y / 2);
@@ -31,8 +34,6 @@ public:
             exit(1);
         }
         energy.setFont(font);
-
-
     }
 
 
@@ -82,14 +83,15 @@ public:
         window->draw(energy);
     }
 
-    void characterDisplay(const string& CharacterFilePath, const string& SwordFilePath, const string& ShieldFilePath){
+    void characterDisplay(const string &CharacterFilePath, const string &SwordFilePath, const string &ShieldFilePath) {
         CharacterImg.loadFromFile(CharacterFilePath);
         Character.setTexture(CharacterImg);
         Character.setOrigin(Character.getGlobalBounds().width / 2, Character.getGlobalBounds().height / 2);
         Character.setPosition(HealthBar.getPosition().x - 200, HealthBar.getPosition().y);
         Character.setScale(0.5f, 0.5f);
 
-        CharacterContainer.setSize(Vector2f(Character.getGlobalBounds().width + 2, Character.getGlobalBounds().height + 2));
+        CharacterContainer.setSize(
+                Vector2f(Character.getGlobalBounds().width + 2, Character.getGlobalBounds().height + 2));
         CharacterContainer.setOrigin(CharacterContainer.getSize().x / 2, CharacterContainer.getSize().y / 2);
         CharacterContainer.setPosition(Character.getPosition().x, Character.getPosition().y);
         CharacterContainer.setOutlineColor(Color::Blue);
@@ -110,32 +112,41 @@ public:
         SwordContainer.setFillColor(Color::Transparent);
 
         ShieldImg.loadFromFile(ShieldFilePath);
-        Shield.setTexture(ShieldImg);
-        Shield.setOrigin(Shield.getGlobalBounds().width / 2, Shield.getGlobalBounds().height / 2);
-        Shield.setPosition(Character.getPosition().x - 50, Character.getPosition().y + 50);
-        Shield.setScale(0.23f, 0.18f);
+        ShieldSprite.setTexture(ShieldImg);
+        ShieldSprite.setOrigin(ShieldSprite.getGlobalBounds().width / 2, ShieldSprite.getGlobalBounds().height / 2);
+        ShieldSprite.setPosition(Character.getPosition().x - 50, Character.getPosition().y + 50);
+        ShieldSprite.setScale(0.23f, 0.18f);
 
-        ShieldContainer.setSize(Vector2f(Shield.getGlobalBounds().width - 2, Shield.getGlobalBounds().height - 2));
+        ShieldContainer.setSize(
+                Vector2f(ShieldSprite.getGlobalBounds().width - 2, ShieldSprite.getGlobalBounds().height - 2));
         ShieldContainer.setOrigin(ShieldContainer.getSize().x / 2, ShieldContainer.getSize().y / 2);
-        ShieldContainer.setPosition(Shield.getPosition().x, Shield.getPosition().y);
+        ShieldContainer.setPosition(ShieldSprite.getPosition().x, ShieldSprite.getPosition().y);
         ShieldContainer.setOutlineColor(Color::Blue);
         ShieldContainer.setOutlineThickness(2);
         ShieldContainer.setFillColor(Color::Transparent);
 
-        DamageDisplay.setString(to_string((int)damage));
+        DamageDisplay.setString(to_string((int) Weapon.getDamage()));
         DamageDisplay.setFont(font);
-        DamageDisplay.setOrigin((DamageDisplay.getGlobalBounds().width / 2) + 3, (DamageDisplay.getGlobalBounds().height / 2) + 7);
-        DamageDisplay.setPosition(Sword.getPosition().x , Sword.getPosition().y + 50);
+        DamageDisplay.setOrigin((DamageDisplay.getGlobalBounds().width / 2) + 3,
+                                (DamageDisplay.getGlobalBounds().height / 2) + 7);
+        DamageDisplay.setPosition(Sword.getPosition().x, Sword.getPosition().y + 50);
 
-        GuardDisplay.setString(to_string((int)guardAmount));
+        GuardDisplay.setString(to_string((int) Shield.getGuard()));
         GuardDisplay.setFont(font);
-        GuardDisplay.setOrigin((GuardDisplay.getGlobalBounds().width / 2) + 3, (GuardDisplay.getGlobalBounds().height / 2) + 7);
-        GuardDisplay.setPosition(Shield.getPosition().x, Shield.getPosition().y + 50);
+        GuardDisplay.setOrigin((GuardDisplay.getGlobalBounds().width / 2) + 3,
+                               (GuardDisplay.getGlobalBounds().height / 2) + 7);
+        GuardDisplay.setPosition(ShieldSprite.getPosition().x, ShieldSprite.getPosition().y + 50);
 
 
     }
 
-    void updateCharacterDisplay(){
+    void updateCharacterDisplay() {
+        DamageDisplay.setString(to_string((int)Weapon.getDamage()));
+        DamageDisplay.setOrigin((DamageDisplay.getGlobalBounds().width / 2) + 3,
+                                (DamageDisplay.getGlobalBounds().height / 2) + 7);
+        GuardDisplay.setString(to_string((int)Shield.getGuard()));
+        GuardDisplay.setOrigin((GuardDisplay.getGlobalBounds().width / 2) + 3,
+                               (GuardDisplay.getGlobalBounds().height / 2) + 7);
         window->draw(Character);
         window->draw(CharacterContainer);
 
@@ -143,7 +154,7 @@ public:
         window->draw(SwordContainer);
         window->draw(DamageDisplay);
 
-        window->draw(Shield);
+        window->draw(ShieldSprite);
         window->draw(ShieldContainer);
         window->draw(GuardDisplay);
 
@@ -162,7 +173,7 @@ public:
 
 
     void doDamage(Entity *opponent) const {
-        opponent->receiveDamage(damage);
+        opponent->receiveDamage((float) Weapon.getDamage());
     }
 
     void ResetGuard() {
@@ -180,6 +191,34 @@ public:
         }
     }
 
+    Item *getWeapon() {
+        return &Weapon;
+    }
+
+    void setWeapon(const Item &weapon) {
+        Weapon = weapon;
+
+    }
+
+    Item *getShield() {
+        return &Shield;
+    }
+
+    void setShield(const Item &shield) {
+        Shield = shield;
+    }
+
+    Item *getTempItem() const {
+        return TempItem;
+    }
+
+    WeaponType getTempItemType() const {
+        return TempItem->getWeaponType();
+    };
+
+    void setTempItem(Item *tempItem) {
+        TempItem = tempItem;
+    }
 
 protected:
     Texture CharacterImg;
@@ -189,7 +228,7 @@ protected:
     Sprite Sword;
     RectangleShape SwordContainer;
     Texture ShieldImg;
-    Sprite Shield;
+    Sprite ShieldSprite;
     RectangleShape ShieldContainer;
     Text DamageDisplay;
     Text GuardDisplay;
@@ -199,11 +238,14 @@ protected:
     Text energy;
 
     float healthWidth;
-    float damage;
-    float guard;
-    float guardAmount;
+    float guard = 0;
     float initialHealth;
     float health;
+
+    Item Weapon;
+    Item Shield;
+    Item *TempItem;
+
 
     RenderWindow *window;
     RectangleShape entity;
