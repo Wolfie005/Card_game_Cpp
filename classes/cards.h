@@ -36,6 +36,8 @@ public:
         window->draw(Card);
     }
 
+    virtual void use() = 0;
+
 
 protected:
     RectangleShape Card;

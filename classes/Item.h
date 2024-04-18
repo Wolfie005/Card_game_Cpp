@@ -70,10 +70,7 @@ public:
 
     void RarityDeclare() {
         int RarityType = WeaponRarityDistribution(*engine);
-        if (0 <= RarityType && RarityType <= 700000) {
-            Rarity = 0.2f;
-        }
-        if ((700001 <= RarityType && RarityType <= 950001) && GameWave >= 20) {
+        if ((700000 <= RarityType && RarityType <= 950000) && GameWave >= 20) {
             Rarity = 2.0f;
         } else {
             Rarity = 0.2f;

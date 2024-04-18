@@ -3,17 +3,23 @@
 #include "gameSituation.h"
 #include "cards.h"
 
-#ifndef CARD_GAME_CARDS_ATTACK_H
-#define CARD_GAME_CARDS_ATTACK_H
 
 using namespace sf;
 using namespace std;
 
 class DebuffCard : public Cards{
 public:
+    DebuffCard(GameSituation *situation, RenderWindow *window, float positionX) : Cards(situation, window, positionX){
+
+        Card.setOutlineColor(Color::Yellow);
+
+    }
+
+    void use() override{
+
+    }
 
 private:
 
 };
 
-#endif //CARD_GAME_CARDS_ATTACK_H

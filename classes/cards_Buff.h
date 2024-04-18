@@ -3,17 +3,23 @@
 #include "gameSituation.h"
 #include "cards.h"
 
-#ifndef CARD_GAME_CARDS_ATTACK_H
-#define CARD_GAME_CARDS_ATTACK_H
 
 using namespace sf;
 using namespace std;
 
 class BuffCard : public Cards{
 public:
+    BuffCard(GameSituation *situation, RenderWindow *window, float positionX) : Cards(situation, window, positionX){
+
+        Card.setOutlineColor(Color::Green);
+
+    }
+
+    void use() override{
+
+    }
 
 private:
 
 };
 
-#endif //CARD_GAME_CARDS_ATTACK_H

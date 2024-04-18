@@ -3,9 +3,14 @@
 #include "./classes/player.h"
 #include "./classes/enemy.h"
 #include "classes/gameSituation.h"
+#include "classes/randomEngine.h"
 #include "classes/KeyHandler.h"
 #include "classes/Item.h"
 #include "classes/cards.h"
+#include "classes/cards_Attack.h"
+#include "classes/cards_Defens.h"
+#include "classes/cards_Debuff.h"
+#include "classes/cards_Buff.h"
 
 using namespace sf;
 using namespace std;
@@ -24,11 +29,33 @@ void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<En
         enemies->emplace_back(pEnemy);
     }
 }
-void setHand(RenderWindow *currentWindow, GameSituation *situation, vector<Cards *> *cards){
+
+void setHand(RenderWindow *currentWindow, GameSituation *situation, vector<Cards *> *cards) {
+    mt19937 *engine = RandomEngine::getInstance().getEngine();
+    uniform_int_distribution<> distribution(1, 4);
+
     for (int i = 0; i < 3; i++) {
         float xPos2 = ((float) currentWindow->getSize().x - 150) - ((float) i * (250));
-        auto *pCard = new Cards(situation, currentWindow, xPos2);
-        cards->emplace_back(pCard);
+
+        int cardTypeDist = distribution(*engine);
+
+        switch (cardTypeDist) {
+            case 1:
+                cards->emplace_back(new AttackCard(situation, currentWindow, xPos2));
+                break;
+            case 2:
+                cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2));
+                break;
+            case 3:
+                cards->emplace_back(new BuffCard(situation, currentWindow, xPos2));
+                break;
+            case 4:
+                cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2));
+                break;
+            default:
+                break;
+        }
+
     }
 }
 
@@ -64,14 +91,11 @@ int main() {
     Wave.setFont(font);
 
 
-
     vector<Entity *> enemies;
     int enemiesPlayed = 0;
     Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H, Keyboard::Key::G, Keyboard::Key::U,
                   Keyboard::Key::Right, &enemies, 0);
     vector<Cards *> cards;
-
-
 
 
     while (window.isOpen()) {
@@ -99,13 +123,13 @@ int main() {
             player.setSelectedEnemy(1);
             gameSituation = GameSituation::PLAYER_TURN;
         }
-        if (gameSituation == GameSituation::PLAYER_TURN){
+        if (gameSituation == GameSituation::PLAYER_TURN && cards.size() <= 3) {
             setHand(&window, &gameSituation, &cards);
         }
 
         if (enemies.empty()) {
             GameState = "Wave";
-            if (GameWave %10 == 0){
+            if (GameWave % 10 == 0) {
                 gameSituation = LOOTING;
             }
         }
@@ -152,7 +176,8 @@ int main() {
 
         } else if (gameSituation == GameSituation::CHOICE) {
             Text Weapon;
-            Weapon.setString("Damage : " + to_string((int)player.getTempItem()->getDamage()) + " " + "Guard : " + to_string((int)player.getTempItem()->getGuard()));
+            Weapon.setString("Damage : " + to_string((int) player.getTempItem()->getDamage()) + " " + "Guard : " +
+                             to_string((int) player.getTempItem()->getGuard()));
             Weapon.setFont(font);
             Weapon.setOrigin(Weapon.getGlobalBounds().width / 2, Weapon.getGlobalBounds().height / 2);
             Weapon.setPosition((float) window.getSize().x / 2, (float) window.getSize().y / 2 - 200);
