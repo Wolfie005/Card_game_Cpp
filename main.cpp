@@ -164,7 +164,7 @@ int main() {
         }
 
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Space)) {
-            cards.at(0)->use();
+            cards.at(SelectedCard)->use();
         }
 
 
