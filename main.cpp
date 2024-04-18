@@ -30,20 +30,20 @@ void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<En
     }
 }
 
-void setHand(RenderWindow *currentWindow, GameSituation *situation, vector<Cards *> *cards) {
+void setHand(RenderWindow *currentWindow, GameSituation *situation, vector<Cards *> *cards, Player *player) {
     mt19937 *engine = RandomEngine::getInstance().getEngine();
     uniform_int_distribution<> distribution(1, 4);
+    int i = cards->size();
 
-    for (int i = 0; i < 3; i++) {
         float xPos2 = ((float) currentWindow->getSize().x - 150) - ((float) i * (250));
 
         int cardTypeDist = distribution(*engine);
 
         switch (cardTypeDist) {
             case 1:
-                cards->emplace_back(new AttackCard(situation, currentWindow, xPos2));
+                cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
                 break;
-            case 2:
+/*            case 2:
                 cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2));
                 break;
             case 3:
@@ -51,13 +51,13 @@ void setHand(RenderWindow *currentWindow, GameSituation *situation, vector<Cards
                 break;
             case 4:
                 cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2));
-                break;
+                break;*/
             default:
+                cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
                 break;
         }
-
-    }
 }
+
 
 
 int main() {
@@ -123,8 +123,8 @@ int main() {
             player.setSelectedEnemy(1);
             gameSituation = GameSituation::PLAYER_TURN;
         }
-        if (gameSituation == GameSituation::PLAYER_TURN && cards.size() <= 3) {
-            setHand(&window, &gameSituation, &cards);
+        if (gameSituation == GameSituation::PLAYER_TURN && cards.size() <= 2) {
+            setHand(&window, &gameSituation, &cards, &player);
         }
 
         if (enemies.empty()) {
@@ -145,6 +145,16 @@ int main() {
         if (Keyboard::isKeyPressed(Keyboard::Escape)) {
             return 0;
         }
+        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::A)) {
+            if (SelectedCard + 1 > cards.size() - 1) SelectedCard = 0;
+            else SelectedCard += 1;
+        }
+
+        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::D)) {
+            if (SelectedCard - 1 < 0) SelectedCard = 2;
+            else SelectedCard -= 1;
+        }
+
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::O)) {
             GameState = "Wave";
             gameSituation = PLAYER_TURN;
@@ -152,9 +162,12 @@ int main() {
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)) {
             gameSituation = LOOTING;
         }
-        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::E)) {
-            gameSituation = PLAYER_TURN;
+
+        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Space)) {
+            cards.at(0)->use();
         }
+
+
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::I)) {
             gameSituation = IDLE;
         }
@@ -208,6 +221,7 @@ int main() {
             for (int i = 0; i < cards.size(); ++i) {
                 auto card = cards[i];
                 card->update();
+                card->setSelectedCard(i == SelectedCard);
             }
 
             Wave.setString("Wave : " + to_string(GameWave));

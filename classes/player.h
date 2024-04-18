@@ -33,7 +33,6 @@ public:
     }
 
 
-
     void update() override {
         if (GameState == "Game Over") {
             return;
@@ -65,8 +64,7 @@ public:
             SelectedEnemy = -1;
         }
 
-        if (SelectedEnemy != -1 && KeyHandler::getInstance().isKeyTrigger(attackKey) &&
-            *situation == GameSituation::PLAYER_TURN && energyToken - 1 >= 0) {
+/*        if (SelectedEnemy != -1 && KeyHandler::getInstance().isKeyTrigger(attackKey)) {
             doDamage(enemies->at(SelectedEnemy));
             energyToken -= 1;
             for (auto entity: *enemies) {
@@ -74,6 +72,10 @@ public:
             }
             playerAttack.setString("Attack");
         }
+
+        if (SelectedEnemy != -1 && *situation == GameSituation::PLAYER_TURN && energyToken - 1 >= 0) {
+
+        }*/
 
         if (KeyHandler::getInstance().isKeyTrigger(RightSelectKey)) {
             if (SelectedEnemy + 1 > enemies->size() - 1) SelectedEnemy = 0;
@@ -104,6 +106,14 @@ public:
 
     }
 
+    Keyboard::Key getAttackKey() const {
+        return attackKey;
+    }
+
+    void setAttackKey(Keyboard::Key attackKey) {
+        Player::attackKey = attackKey;
+    }
+
     int getSelected() const {
         return SelectedEnemy;
     }
@@ -115,6 +125,27 @@ public:
     void setSelectedEnemy(int i) {
         SelectedEnemy = i;
     }
+
+    vector<Entity *> *getEnemies() const {
+        return enemies;
+    }
+
+    void setEnemies(vector<Entity *> *newEnemies) {
+        enemies = newEnemies;
+    }
+
+    int getEnergyToken() const {
+        return energyToken;
+    }
+
+    void setEnergyToken(int newEnergyToken) {
+        energyToken = newEnergyToken;
+    }
+
+    Text *getPlayerAttack() {
+        return &playerAttack;
+    }
+
 
 private:
     int energyRecieve = 0;

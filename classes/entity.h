@@ -188,6 +188,7 @@ public:
             entity.setOutlineThickness(2);
         } else {
             entity.setOutlineThickness(0);
+
         }
     }
 
@@ -220,9 +221,11 @@ public:
         TempItem = tempItem;
     }
 
+
 protected:
     Texture CharacterImg;
     Sprite Character;
+
     RectangleShape CharacterContainer;
     Texture SwordImg;
     Sprite Sword;

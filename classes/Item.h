@@ -42,9 +42,6 @@ public:
 
         }
 
-        cout << "rarity: " << Rarity << endl;
-        cout << "damage: " << damage << endl;
-        cout << "guard: " << guard << endl;
     };
 
     WeaponType getWeaponType() const {
@@ -81,7 +78,6 @@ public:
             Rarity = 0.2f;
         }
     }
-
 
 private:
     float Rarity = 0;
