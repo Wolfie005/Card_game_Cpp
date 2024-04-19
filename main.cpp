@@ -155,10 +155,6 @@ int main() {
             else SelectedCard -= 1;
         }
 
-        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::O)) {
-            GameState = "Wave";
-            gameSituation = PLAYER_TURN;
-        }
         if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)) {
             gameSituation = LOOTING;
         }
@@ -167,10 +163,6 @@ int main() {
             cards.at(SelectedCard)->use();
         }
 
-
-        if (KeyHandler::getInstance().isKeyTrigger(Keyboard::I)) {
-            gameSituation = IDLE;
-        }
         //clear
         window.clear(Color::Black);
 

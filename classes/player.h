@@ -84,16 +84,16 @@ public:
             else SelectedEnemy += 1;
         }
 
-        if (KeyHandler::getInstance().isKeyTrigger(HealKey) && health + 10 <= initialHealth && energyToken - 1 >= 0) {
+       /* if (KeyHandler::getInstance().isKeyTrigger(HealKey) && health + 10 <= initialHealth && energyToken - 1 >= 0) {
             health += 10;
             energyToken -= 1;
             playerAttack.setString("Heal");
-        }
+        }*/
 
-        if (KeyHandler::getInstance().isKeyTrigger(EnergyReplenishKey) && energyToken + 1 <= 10) {
+       /* if (KeyHandler::getInstance().isKeyTrigger(EnergyReplenishKey) && energyToken + 1 <= 10) {
             energyToken += 1;
             playerAttack.setString("Replenish");
-        }
+        }*/
 
        /* if (KeyHandler::getInstance().isKeyTrigger(GuardKey) && energyToken - 1 >= 0) {
             guard += Shield.getGuard();
