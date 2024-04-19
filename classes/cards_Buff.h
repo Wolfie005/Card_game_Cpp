@@ -52,8 +52,9 @@ public:
         }else if (buffType == BuffType::REPLENISH){
             player->getPlayerAttack()->setString("Already max energy");
         }
-
+        used = true;
     }
+
 
 private:
     Player *player;

@@ -23,7 +23,7 @@ public:
 
         Card.setSize(Vector2f(150, 250));
         Card.setOrigin(Card.getSize().x / 2, Card.getSize().y / 2);
-        Card.setPosition(positionX, (float) window->getSize().y - 200);
+        Card.setPosition(positionX, positionY);
         Card.setFillColor(Color::Transparent);
         Card.setOutlineColor(Color::White);
         Card.setOutlineThickness(2);
@@ -33,7 +33,17 @@ public:
     //virtual void CardAttackType(cardType) = 0;
 
     void update() {
+        if (used) return;
         window->draw(Card);
+
+    }
+
+    bool markedForRemoval(){
+        return used;
+    }
+
+    void setXPosition(float positionX){
+        Card.setPosition(positionX, positionY);
     }
 
     void setSelectedCard(bool isCardSelected) {
@@ -51,6 +61,8 @@ protected:
     RectangleShape Card;
     RenderWindow *window;
     GameSituation *situation;
+    float positionY = (float)window->getSize().y - 200;
+    bool used = false;
 };
 
 #endif //CARD_GAME_CARDS_H

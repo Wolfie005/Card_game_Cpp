@@ -31,8 +31,7 @@ public:
         }else{
             player->getPlayerAttack()->setString("Enemy Already DeBuffed");
         }
-
-
+        used = true;
     }
 
 private:

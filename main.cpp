@@ -58,6 +58,15 @@ void setHand(RenderWindow *currentWindow, GameSituation *situation, vector<Cards
         }
 }
 
+void updatePosition(RenderWindow *currentWindow, vector<Cards *> *cards){
+    for (int i = 0; i < cards->size(); ++i) {
+        float _xPos = ((float) currentWindow->getSize().x - 150) - ((int) i * (250));
+        auto card = (*cards)[i];
+        card->setXPosition(_xPos);
+
+    }
+};
+
 
 
 int main() {
@@ -125,6 +134,7 @@ int main() {
         }
         if (gameSituation == GameSituation::PLAYER_TURN && cards.size() <= 2) {
             setHand(&window, &gameSituation, &cards, &player);
+            updatePosition(&window, &cards);
         }
 
         if (enemies.empty()) {
@@ -138,6 +148,13 @@ int main() {
             auto entity = enemies[i];
             if (entity->markedForRemoval()) {
                 enemies.erase(enemies.begin() + i);
+            }
+        }
+
+        for (int i = 0; i < cards.size(); i++) {
+            auto card = cards[i];
+            if (card->markedForRemoval()) {
+                cards.erase(cards.begin() + i);
             }
         }
 

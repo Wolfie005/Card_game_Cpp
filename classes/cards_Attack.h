@@ -73,7 +73,7 @@ public:
             player->getPlayerAttack()->setString("Double Attack");
         }
         if (player->getSelected() != -1 && *situation == GameSituation::PLAYER_TURN &&
-        attackType == AttackType::SINGLE_ENERGY) {
+            attackType == AttackType::SINGLE_ENERGY) {
             player->doDamage(player->getEnemies()->at(player->getSelected()));
             for (auto entity: *player->getEnemies()) {
                 entity->ResetGuard();
@@ -81,7 +81,7 @@ public:
             player->getPlayerAttack()->setString("Energy Attack");
         }
         if (player->getSelected() != -1 && *situation == GameSituation::PLAYER_TURN &&
-        attackType == AttackType::DOUBLE_ENERGY) {
+            attackType == AttackType::DOUBLE_ENERGY) {
             player->doDamage(player->getEnemies()->at(player->getSelected()));
             player->doDamage(player->getEnemies()->at(player->getSelected()));
             for (auto entity: *player->getEnemies()) {
@@ -89,7 +89,10 @@ public:
             }
             player->getPlayerAttack()->setString("Energy Double Attack");
         }
+        used = true;
     }
+
+
 
 
 private:
