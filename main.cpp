@@ -94,7 +94,7 @@ int main() {
     vector<Entity *> enemies;
     int enemiesPlayed = 0;
     Player player(&gameSituation, &window, Keyboard::Key::Space, Keyboard::Key::H, Keyboard::Key::G, Keyboard::Key::U,
-                  Keyboard::Key::Right, &enemies, 0);
+                  Keyboard::Key::Right, Keyboard::Key::Left, &enemies, 0);
     vector<Cards *> cards;
 
 

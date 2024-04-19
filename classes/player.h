@@ -17,11 +17,11 @@ using namespace std;
 class Player : public Entity {
 public:
     Player(GameSituation *situation, RenderWindow *currentWindow, Keyboard::Key attackKey, Keyboard::Key HealKey,
-           Keyboard::Key GuardKey, Keyboard::Key EnergyReplenishKey, Keyboard::Key RightSelectKey,
+           Keyboard::Key GuardKey, Keyboard::Key EnergyReplenishKey, Keyboard::Key RightSelectKey, Keyboard::Key LeftSelectKey,
            vector<Entity *> *enemies, int energyToken)
             : Entity(situation, currentWindow, 100), enemies(enemies), attackKey(attackKey), HealKey(HealKey),
               GuardKey(GuardKey), EnergyReplenishKey(EnergyReplenishKey),
-              RightSelectKey(RightSelectKey), energyToken(energyToken) {
+              RightSelectKey(RightSelectKey), LeftSelectKey(LeftSelectKey), energyToken(energyToken) {
 
         entity.setPosition((float) window->getSize().x / 2.0f, (float) window->getSize().y / 1.5f);
         guard = 0;
@@ -82,6 +82,10 @@ public:
         if (KeyHandler::getInstance().isKeyTrigger(RightSelectKey)) {
             if (SelectedEnemy + 1 > enemies->size() - 1) SelectedEnemy = 0;
             else SelectedEnemy += 1;
+        }
+        if (KeyHandler::getInstance().isKeyTrigger(LeftSelectKey)) {
+            if (SelectedEnemy - 1 < 0) SelectedEnemy = 2;
+            else SelectedEnemy -= 1;
         }
 
        /* if (KeyHandler::getInstance().isKeyTrigger(HealKey) && health + 10 <= initialHealth && energyToken - 1 >= 0) {
@@ -159,6 +163,7 @@ private:
     Keyboard::Key EnergyReplenishKey;
     Keyboard::Key GuardKey;
     Keyboard::Key RightSelectKey;
+    Keyboard::Key LeftSelectKey;
     Keyboard::Key attackKey;
     Keyboard::Key HealKey;
     vector<Entity *> *enemies;
