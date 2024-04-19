@@ -8,6 +8,8 @@
 #include "SFML/Graphics.hpp"
 #include "entity.h"
 #include "KeyHandler.h"
+#include "Item.h"
+
 
 using namespace sf;
 using namespace std;
@@ -93,13 +95,14 @@ public:
             playerAttack.setString("Replenish");
         }
 
-        if (KeyHandler::getInstance().isKeyTrigger(GuardKey) && energyToken - 1 >= 0) {
+       /* if (KeyHandler::getInstance().isKeyTrigger(GuardKey) && energyToken - 1 >= 0) {
             guard += Shield.getGuard();
             energyToken -= 1;
             playerAttack.setString("Guard");
-        }
+        }*/
         if (energyToken == 0) {
             *situation = GameSituation::ENEMY_TURN;
+            getWeapon()->setDamage(getWeapon()->getInitialDamage());
             energyRecieve = 0;
         }
 

@@ -20,9 +20,9 @@ public:
 
 
     void use() override{
-        /*player.getGuard += Shield.getGuard();
-        energyToken -= 1;
-        playerAttack.setString("Guard");*/
+        player->setGuard(player->getGuard() + player->getShield()->getGuard());
+        player->setEnergyToken(player->getEnergyToken() - 1);
+        player->getPlayerAttack()->setString("Guard");
     }
 
 

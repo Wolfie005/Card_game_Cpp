@@ -176,6 +176,26 @@ public:
         opponent->receiveDamage((float) Weapon.getDamage());
     }
 
+    float getGuard() const {
+        return guard;
+    }
+
+    float getHealth() const {
+        return health;
+    }
+
+    float getInitialHealth() const {
+        return initialHealth;
+    }
+
+    void setHealth(float health) {
+        Entity::health = health;
+    }
+
+    void setGuard(float guard) {
+        Entity::guard = guard;
+    }
+
     void ResetGuard() {
         guard = 0;
     }

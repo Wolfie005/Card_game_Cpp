@@ -1,7 +1,6 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
 #include "./classes/player.h"
-#include "./classes/enemy.h"
 #include "classes/gameSituation.h"
 #include "classes/randomEngine.h"
 #include "classes/KeyHandler.h"
@@ -43,15 +42,16 @@ void setHand(RenderWindow *currentWindow, GameSituation *situation, vector<Cards
             case 1:
                 cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
                 break;
-/*            case 2:
-                cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2));
+            case 2:
+                cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
                 break;
+
             case 3:
-                cards->emplace_back(new BuffCard(situation, currentWindow, xPos2));
+                cards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
                 break;
             case 4:
-                cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2));
-                break;*/
+                cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2, player, player->getWeapon()));
+                break;
             default:
                 cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
                 break;
