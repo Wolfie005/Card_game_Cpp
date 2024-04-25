@@ -25,8 +25,9 @@ public:
 
 
         //enemy take more damage
-        if (weapon->getDamage() == weapon->getInitialDamage()){
+        if (weapon->getDamage() == weapon->getInitialDamage() && player->getEnergyToken() - 1 >=0){
             weapon->setDamage(weapon->getInitialDamage() / 0.75f);
+            player->setEnergyToken(player->getEnergyToken() - 1);
             player->getPlayerAttack()->setString("Enemy DeBuffed");
         }else{
             player->getPlayerAttack()->setString("Enemy Already DeBuffed");

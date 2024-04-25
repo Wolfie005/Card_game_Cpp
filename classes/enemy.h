@@ -14,7 +14,8 @@ public:
             player(player), enemies(enemies),
             enemiesPlayed(enemiesPlayed) {
 
-        entity.setPosition(positionX, (float) window->getSize().y / 3.0f);
+        Vector2f position = Vector2f(positionX, (float) window->getSize().y / 3.0f);
+        entity.setPosition(position);
         Weapon.setDamage(Weapon.getDamage() * (float)GameWave);
         Shield.setGuard(Shield.getGuard() * (float)GameWave);
         initializeHealthBar(ENEMY);
@@ -66,6 +67,7 @@ public:
     }
 
 private:
+    float InitialPosition;
     Font font;
     Text enemyAttack;
     Player *player;

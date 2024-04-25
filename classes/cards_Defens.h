@@ -20,9 +20,12 @@ public:
 
 
     void use() override{
-        player->setGuard(player->getGuard() + player->getShield()->getGuard());
-        player->setEnergyToken(player->getEnergyToken() - 1);
-        player->getPlayerAttack()->setString("Guard");
+        if (player->getEnergyToken() - 1 >= 0){
+            player->setGuard(player->getGuard() + player->getShield()->getGuard());
+            player->setEnergyToken(player->getEnergyToken() - 1);
+            player->getPlayerAttack()->setString("Guard");
+        }
+
         used = true;
     }
 

@@ -39,7 +39,7 @@ public:
     }
 
     void use() override{
-        if(player->getHealth() + 10 <= player->getInitialHealth() && buffType == BuffType::HEAL){
+        if(player->getHealth() + 10 <= player->getInitialHealth() && buffType == BuffType::HEAL && player->getEnergyToken() - 1 >= 0){
             player->setHealth(player->getHealth() + 10);
             player->setEnergyToken(player->getEnergyToken() - 1 );
             player->getPlayerAttack()->setString("Heal");

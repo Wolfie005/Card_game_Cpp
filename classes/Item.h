@@ -22,7 +22,7 @@ enum WeaponType {
 class Item {
 public:
     Item(GameSituation *situation, WeaponType weaponType, int *GameWave) : situation(situation),
-                                                                           weaponType(weaponType), initialDamage(damage) {
+                                                                           weaponType(weaponType), initialDamage(damage), initialGuard(guard) {
         WeaponRarityDistribution = uniform_int_distribution(0, 900000);
         RarityDeclare();
         WeaponDamageDistribution = uniform_real_distribution<float>(10 * Rarity * (float) *GameWave,
@@ -35,15 +35,26 @@ public:
                 break;
             case SHIELD:
                 guard = floorf(WeaponDamageDistribution(*engine) * 100) / 100;
+                setInitialGuard(guard);
                 break;
             default:
                 damage = 5;
                 guard = 10;
                 setInitialDamage(damage);
+                setInitialGuard(guard);
                 break;
 
         }
+    }
 
+    void setDefaultWeapon(){
+        damage = 5;
+        setInitialDamage(damage);
+    }
+
+    void setDefaultShield(){
+        guard = 10;
+        setInitialGuard(guard);
     }
 
     float getInitialDamage() const {
@@ -53,6 +64,16 @@ public:
     void setInitialDamage(float _initialDamage) {
         Item::initialDamage = _initialDamage;
     };
+
+    void setInitialGuard(float _initialGuard) {
+        Item::initialGuard = _initialGuard;
+    };
+
+    float getInitialGuard() const {
+        return initialGuard;
+    }
+
+
 
     WeaponType getWeaponType() const {
         return weaponType;
@@ -92,8 +113,9 @@ public:
 private:
     float Rarity = 0;
     float damage = 0;
-    float guard = 0;
     float initialDamage;
+    float guard = 0;
+    float initialGuard;
     Font font;
     Text Answer;
     WeaponType weaponType;

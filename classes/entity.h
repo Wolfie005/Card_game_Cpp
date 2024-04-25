@@ -192,6 +192,10 @@ public:
         Entity::health = health;
     }
 
+    void resetHealth(){
+        health = initialHealth;
+    }
+
     void setGuard(float guard) {
         Entity::guard = guard;
     }

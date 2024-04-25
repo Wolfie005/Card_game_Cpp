@@ -13,7 +13,9 @@ enum GameSituation {
     ENEMY_TURN,
     PLAYER_TURN,
     LOOTING,
-    CHOICE
+    CHOICE,
+    CARDS,
+    RESETCARDS
 };
 string GameState = "Start";
 int GameWave = 0;

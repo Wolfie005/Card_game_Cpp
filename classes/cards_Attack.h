@@ -48,8 +48,6 @@ public:
                 attackType = AttackType::DOUBLE_ENERGY;
                 break;
         }
-
-
     }
 
     void use() override {

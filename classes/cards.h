@@ -30,16 +30,24 @@ public:
 
     }
 
-    //virtual void CardAttackType(cardType) = 0;
 
     void update() {
         if (used) return;
         window->draw(Card);
-
     }
 
     bool markedForRemoval(){
+        reset = false;
         return used;
+    }
+    bool markedForReset(){
+        return reset;
+    }
+
+
+    void setUnmarkedForRemoval(){
+        used = false;
+        reset = true;
     }
 
     void setXPosition(float positionX){
@@ -63,6 +71,7 @@ protected:
     GameSituation *situation;
     float positionY = (float)window->getSize().y - 200;
     bool used = false;
+    bool reset = false;
 };
 
 #endif //CARD_GAME_CARDS_H
