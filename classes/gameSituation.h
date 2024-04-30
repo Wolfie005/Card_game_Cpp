@@ -15,9 +15,11 @@ enum GameSituation {
     LOOTING,
     CHOICE,
     CARDS,
-    RESETCARDS
+    RESETCARDS,
+    NEW_CARDS
 };
 string GameState = "Start";
 int GameWave = 0;
 int SelectedCard = 0;
+
 #endif //CARD_GAME_GAMESITUATION_H

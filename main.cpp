@@ -18,6 +18,7 @@ float width = 1920;
 float height = 1080;
 
 
+
 void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<Entity *> *enemies, Player *player,
                 int *enemiesPlayed) {
     GameState = "Fight";
@@ -30,9 +31,9 @@ void enemySpawn(RenderWindow *currentWindow, GameSituation *situation, vector<En
 }
 
 void createCards(RenderWindow *currentWindow, GameSituation *situation, vector<Cards *> *cards, vector<Cards *> *hand,
-                 Player *player) {
+                 Player *player, Text *cardSet) {
     mt19937 *engine = RandomEngine::getInstance().getEngine();
-    uniform_int_distribution<> distribution(1, 1);
+    uniform_int_distribution<> distribution(1, 4);
     int i = hand->size();
 
     float xPos2 = ((float) currentWindow->getSize().x - 150) - ((float) i * (250));
@@ -42,16 +43,83 @@ void createCards(RenderWindow *currentWindow, GameSituation *situation, vector<C
     switch (cardTypeDist) {
         case 1:
             cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2, player, player->getWeapon()));
+            cardSet->setString("Attack card set");
+            cardSet->setOrigin(cardSet->getGlobalBounds().width / 2, cardSet->getGlobalBounds().height / 2);
             break;
         case 2:
             cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2, player, player->getWeapon()));
+            cardSet->setString("Defense card set");
+            cardSet->setOrigin(cardSet->getGlobalBounds().width / 2, cardSet->getGlobalBounds().height / 2);
             break;
         case 3:
             cards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2, player, player->getWeapon()));
+            cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2, player, player->getWeapon()));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cardSet->setString("Buff card set");
+            cardSet->setOrigin(cardSet->getGlobalBounds().width / 2, cardSet->getGlobalBounds().height / 2);
             break;
         case 4:
             cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2, player, player->getWeapon()));
+            cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2, player, player->getWeapon()));
+            cards->emplace_back(new DebuffCard(situation, currentWindow, xPos2, player, player->getWeapon()));
+            cards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+            cardSet->setString("DeBuff card set");
+            cardSet->setOrigin(cardSet->getGlobalBounds().width / 2, cardSet->getGlobalBounds().height / 2);
             break;
+        default:
+            break;
+    }
+}
+
+void createNemCard(RenderWindow *currentWindow, GameSituation *situation, vector<Cards *> *TempCards, Player *player){
+    mt19937 *engine = RandomEngine::getInstance().getEngine();
+    uniform_int_distribution<> distribution(1, 4);
+    int i = TempCards->size();
+
+    float xPos2 = ((float) currentWindow->getSize().x / 2) - ((float) i * (250));
+
+    int cardTypeDist = distribution(*engine);
+
+    switch (cardTypeDist){
+        case 1:
+            TempCards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
+        case 2:
+            TempCards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
+        case 3:
+            TempCards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
+        case 4:
+            TempCards->emplace_back(new DebuffCard(situation, currentWindow, xPos2, player, player->getWeapon()));
         default:
             break;
     }
@@ -122,6 +190,9 @@ int main() {
     GameOver.setPosition((float) window.getSize().x / 2, (float) window.getSize().y / 2);
     Text Wave;
     Wave.setFont(font);
+    Text cardSet;
+    cardSet.setFont(font);
+
 
 
     vector<Entity *> enemies;
@@ -131,6 +202,10 @@ int main() {
     vector<Cards *> cards;
     vector<Cards *> hand;
     vector<Cards *> DiscardedCards;
+    vector<Cards *> TempCards;
+
+
+    cardSet.setPosition(player.getPosition().x + 560, player.getPosition().y);
 
 
     while (window.isOpen()) {
@@ -154,9 +229,7 @@ int main() {
 
 
         if (GameState == "Start" && cards.size() <= 9) {
-            createCards(&window, &gameSituation, &cards, &hand, &player);
-            for (auto card : cards){
-            }
+            createCards(&window, &gameSituation, &cards, &hand, &player, &cardSet);
         } else if (GameState == "Start" && cards.size() == 10) {
             GameState = "Wave";
         }
@@ -288,7 +361,9 @@ int main() {
                 gameSituation = GameSituation::PLAYER_TURN;
             }
 
-        } else {
+        }else if (gameSituation == GameSituation::NEW_CARDS){
+        createNemCard(&window, &gameSituation, &TempCards, &player);
+    } else {
             //update and display
             for (int i = 0; i < enemies.size(); ++i) {
                 auto entity = enemies[i];
@@ -300,6 +375,7 @@ int main() {
                 auto card = hand[i];
                 card->update();
                 card->setSelectedCard(i == SelectedCard);
+                window.draw(cardSet);
             }
 
             Wave.setString("Wave : " + to_string(GameWave));

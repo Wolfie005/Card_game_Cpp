@@ -5,6 +5,11 @@
 using namespace sf;
 using namespace std;
 
+enum SelectedType{
+    SELECTED,
+    NOTsELECTED1,
+    NOTsELECTED2
+};
 
 class Enemy : public Entity {
 public:
@@ -14,12 +19,13 @@ public:
             player(player), enemies(enemies),
             enemiesPlayed(enemiesPlayed) {
 
-        Vector2f position = Vector2f(positionX, (float) window->getSize().y / 3.0f);
+        position = Vector2f(positionX, (float) window->getSize().y / 3.0f);
         entity.setPosition(position);
+        initialPositionX = entity.getPosition().x;
+        initialPositionY = entity.getPosition().y;
         Weapon.setDamage(Weapon.getDamage() * (float)GameWave);
         Shield.setGuard(Shield.getGuard() * (float)GameWave);
         initializeHealthBar(ENEMY);
-        cout << "enemy Damage:" << Weapon.getDamage() << endl;
 
         if (!font.loadFromFile("../fonts/Roboto-Light.ttf")) {
             cout << "Error loading font";
@@ -35,6 +41,12 @@ public:
         enemyAttack.setOrigin(enemyAttack.getGlobalBounds().width / 2, enemyAttack.getGlobalBounds().height / 2);
         enemyAttack.setPosition(entity.getPosition().x, entity.getPosition().y - 150);
         window->draw(enemyAttack);
+
+        if (_isSelected && entity.getPosition().y < initialPositionY + 50){
+            entity.setPosition(entity.getPosition().x, entity.getPosition().y + 5);
+        }else if (!_isSelected){
+            entity.setPosition(initialPositionX, initialPositionY);
+        }
 
         if (*enemiesPlayed == enemies->size()) {
             *situation = GameSituation::PLAYER_TURN;
@@ -67,10 +79,15 @@ public:
     }
 
 private:
-    float InitialPosition;
+
+    Vector2f position;
+    float initialPositionY;
+    float initialPositionX;
+
     Font font;
     Text enemyAttack;
     Player *player;
     vector<Entity *> *enemies;
     int *enemiesPlayed;
+
 };

@@ -23,7 +23,8 @@ public:
               GuardKey(GuardKey), EnergyReplenishKey(EnergyReplenishKey),
               RightSelectKey(RightSelectKey), LeftSelectKey(LeftSelectKey), energyToken(energyToken) {
 
-        entity.setPosition((float) window->getSize().x / 2.0f, (float) window->getSize().y / 1.5f);
+        position = Vector2f((float)window->getSize().x / 2.0f, (float) window->getSize().y / 1.5f);
+        entity.setPosition(position);
         guard = 0;
         initializeHealthBar(PLAYER);
         characterDisplay("../img/character.png", "../img/sword.png", "../img/shield.png");
@@ -153,6 +154,10 @@ public:
         return &playerAttack;
     }
 
+    const Vector2f &getPosition() const {
+        return position;
+    }
+
 
 private:
     int energyRecieve = 0;
@@ -167,6 +172,7 @@ private:
     Keyboard::Key attackKey;
     Keyboard::Key HealKey;
     vector<Entity *> *enemies;
+    Vector2f position;
 };
 
 #endif //CARD_GAME_PLAYER_H

@@ -172,6 +172,7 @@ public:
     }
 
 
+
     void doDamage(Entity *opponent) const {
         opponent->receiveDamage((float) Weapon.getDamage());
     }
@@ -210,11 +211,14 @@ public:
         if (isSelected) {
             entity.setOutlineColor(Color::Red);
             entity.setOutlineThickness(2);
+            _isSelected = true;
         } else {
             entity.setOutlineThickness(0);
-
+            _isSelected = false;
         }
     }
+
+
 
     Item *getWeapon() {
         return &Weapon;
@@ -244,7 +248,6 @@ public:
     void setTempItem(Item *tempItem) {
         TempItem = tempItem;
     }
-
 
 protected:
     Texture CharacterImg;
@@ -279,6 +282,8 @@ protected:
     GameSituation *situation;
     RectangleShape HealthContainer;
     RectangleShape HealthBar;
+
+    bool _isSelected = false;
 };
 
 #endif //CARD_GAME_ENTITY_H

@@ -40,10 +40,10 @@ public:
         reset = false;
         return used;
     }
+
     bool markedForReset(){
         return reset;
     }
-
 
     void setUnmarkedForRemoval(){
         used = false;
@@ -63,7 +63,6 @@ public:
     }
 
     virtual void use() = 0;
-
 
 protected:
     RectangleShape Card;
