@@ -39,12 +39,13 @@ public:
         window->draw(entity);
 
         enemyAttack.setOrigin(enemyAttack.getGlobalBounds().width / 2, enemyAttack.getGlobalBounds().height / 2);
-        enemyAttack.setPosition(entity.getPosition().x, entity.getPosition().y - 150);
         window->draw(enemyAttack);
 
         if (_isSelected && entity.getPosition().y < initialPositionY + 50){
             entity.setPosition(entity.getPosition().x, entity.getPosition().y + 5);
+            enemyAttack.setPosition(entity.getPosition().x, entity.getPosition().y - 200);
         }else if (!_isSelected){
+            enemyAttack.setPosition(entity.getPosition().x, entity.getPosition().y - 150);
             entity.setPosition(initialPositionX, initialPositionY);
         }
 
