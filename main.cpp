@@ -107,22 +107,21 @@ void createNemCard(RenderWindow *currentWindow, GameSituation *situation, vector
     uniform_int_distribution<> distribution(1, 4);
     int i = TempCards->size();
 
-    float xPos2 = ((float) currentWindow->getSize().x / 2) - ((float) i * (250));
+    float xPos3 = ((float) currentWindow->getSize().x / 2) - ((float) i * (250));
 
     int cardTypeDist = distribution(*engine);
-
-    switch (cardTypeDist){
-        case 1:
-            TempCards->emplace_back(new AttackCard(situation, currentWindow, xPos2, player));
-        case 2:
-            TempCards->emplace_back(new DefenseCard(situation, currentWindow, xPos2, player));
-        case 3:
-            TempCards->emplace_back(new BuffCard(situation, currentWindow, xPos2, player));
-        case 4:
-            TempCards->emplace_back(new DebuffCard(situation, currentWindow, xPos2, player, player->getWeapon()));
-        default:
-            break;
-    }
+        switch (cardTypeDist){
+            case 1:
+                TempCards->emplace_back(new AttackCard(situation, currentWindow, xPos3, player));
+            case 2:
+                TempCards->emplace_back(new DefenseCard(situation, currentWindow, xPos3, player));
+            case 3:
+                TempCards->emplace_back(new BuffCard(situation, currentWindow, xPos3, player));
+            case 4:
+                TempCards->emplace_back(new DebuffCard(situation, currentWindow, xPos3, player, player->getWeapon()));
+            default:
+                break;
+        }
 }
 
 void setHand(vector<Cards *> *cards, vector<Cards *> *hand) {
@@ -248,6 +247,12 @@ int main() {
         if (cards.size() <= 2 && GameState != "Start") {
             gameSituation = CARDS;
         }
+        if (gameSituation == GameSituation::NEW_CARDS && !cardsDeny){
+            for (int _i = 0; _i < 3; ++_i){
+                createNemCard(&window, &gameSituation, &TempCards, &player);
+            }
+            cardsDeny = true;
+        }
 
         if (gameSituation == GameSituation::CARDS) {
             for (auto DiscardedCard: DiscardedCards) {
@@ -298,10 +303,6 @@ int main() {
             if (KeyHandler::getInstance().isKeyTrigger(Keyboard::D)) {
                 if (SelectedCard - 1 < 0) SelectedCard = 2;
                 else SelectedCard -= 1;
-            }
-
-            if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Q)) {
-                gameSituation = LOOTING;
             }
 
             if (KeyHandler::getInstance().isKeyTrigger(Keyboard::Space)) {
@@ -362,7 +363,9 @@ int main() {
             }
 
         }else if (gameSituation == GameSituation::NEW_CARDS){
-        createNemCard(&window, &gameSituation, &TempCards, &player);
+        for (auto card : TempCards){
+            card->update();
+        }
     } else {
             //update and display
             for (int i = 0; i < enemies.size(); ++i) {

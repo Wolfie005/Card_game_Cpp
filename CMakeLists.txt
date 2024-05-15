@@ -16,7 +16,6 @@ option(SFML_BUILD_NETWORK "Build network" OFF)
 FetchContent_MakeAvailable(sfml)
 
 add_executable(Card_game main.cpp
-        classes/button.h
         classes/player.h
         classes/enemy.h
         classes/entity.h
